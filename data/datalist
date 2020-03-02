@@ -1,0 +1,7 @@
+cnv_blacklist_regions
+hg19: refseq_hg19
+hg38: refseq_hg38
+nbl_target_cnv: nbl_segdat
+nbl_target_sv: nbl_svdat
+segdat_lung_ccle
+svdat_lung_ccle

@@ -1,0 +1,34 @@
+Package: svpluscnv
+Title: svpluscnv: analysis and visualization of complex structural variation data
+Version: 0.99.1
+Author:
+	person("Gonzalo", "Lopez",
+		role = c("aut", "cre"),
+		email = "gonzolgarcia@gmail.com",
+		comment = c(ORCID = "0000-0002-5092-1284"))
+	person("Laura", "Egolf",
+		role = c("aut"),
+		email = "laura.e.egolf@gmail.com",
+		comment = c(ORCID = "0000-0002-7103-4801"))
+	person("Federico", "Giorgi",
+		role = c("ctb"),
+		email = "federico.giorgi@gmail.com",
+		comment = c(ORCID = "0000-0002-7325-9908"))
+Maintainer: 
+    Gonzao Lopez <gonzolgarcia@gmail.com>
+Description: svpluscnv R package is a "swiss army knife"" for the integration and interpretation of orthogonal datasets including copy number variant (CNV) segmentation profiles and sequencing-based structural variant calls (SVC). The package implements analysis and visualization tools to evaluate chromosomal instability and ploidy, identify genes harboring recurrent SVs and systematically characterize hot-spot genomic locations harboring complex rearrangements such as chromothripsis and chromoplexia.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+biocViews: StructuralVariation, VariantAnnotation, CopyNumberVariation, Sequencing, GenomicVariation
+Depends: R (>= 3.6)
+Imports: IRanges, GenomicRanges, tidyr, data.table, circlize, D3GB, shape, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg19.knownGene, TxDb.Hsapiens.UCSC.hg38.knownGene, methods, stats, graphics, utils, grDevices, taRifx, S4Vectors, AnnotationDbi,GenomicAlignments,GenomicFeatures,scales
+Suggests: 
+	BiocStyle,
+	knitr,
+	rmarkdown
+Collate: 
+    validate.input.data.r internal_functions.r break.annot.r breakpoint.density.r shattered.regions.r chr.arm.cnv.r  segment.means.r circular.plot.r cnv.freq.plot.r  clean.cnv.artifact.r  freq.p.test.r gene.cnv.r gene.track.view.r get.genesgr.r hot.spot.samples.R pct.genome.changed.r shattered.map.plot.r shattered.regions.cnv.r  sv.model.view.r svpluscnv.data.r
+VignetteBuilder: knitr
+git_url: https://github.com/ccbiolab/svpluscnv
