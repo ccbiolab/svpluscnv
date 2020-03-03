@@ -1,11 +1,16 @@
 ---
 title: "Comparative analysis of orthogonal Breast Cancer datasets"
 author: [Gonzalo Lopez, PhD](https://www.mountsinai.org/profiles/gonzalo-lopez-garcia)
-output: rmarkdown::html_document
+date: "March 03, 2020"
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Comparative analysis of orthogonal Breast Cancer datasets}
+  %\VignetteKeywords{CNV, structural variants}
+  %\VignettePackage{svpluscnv}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8} 
 ---
 
 

@@ -1,3 +1,27 @@
+---
+title: "Introduction to svpluscnv"
+author: [Gonzalo Lopez, PhD](https://www.mountsinai.org/profiles/gonzalo-lopez-garcia)
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to svpluscnv}
+  %\VignetteKeywords{CNV, structural variants}
+  %\VignettePackage{svpluscnv}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+```{r echo=FALSE}
+graphics.off()
+def.par <- par(no.readonly = TRUE)
+```
 
 ## svncvplus: R toolkit for the analysis of structural variants and complex genomic rearrangements
 
@@ -41,11 +65,6 @@ The `svpluscnv` package implements analysis and visualization tools to evaluate 
 Install development version from GitHub
 ```{r message=FALSE, eval=FALSE}
 devtools::install_github("ccbiolab/svpluscnv")
-```
-
-```{r echo=FALSE}
-graphics.off()
-def.par <- par(no.readonly = TRUE)
 ```
 
 ## Input data types
