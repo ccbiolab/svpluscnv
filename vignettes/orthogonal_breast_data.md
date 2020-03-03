@@ -360,38 +360,40 @@ code > span.paren { color: #000000;}
 #### Gonzalo Lopez, Laura E. Egolf, Federico M. Giorgi, Sharon J. Diskin, and Adam A. Margolin
 
 
-## Table of Contents
+## Table of Contents:
 
-*[Introduction](introduction) 
-*[Code availability](code-availability)
-*[Source of datasets used along this study](source-of-datasets-used-along-this-study)
-*[Genome-wide visualization of CNV frequencies](genome-wide-visualization-of-cnv-frequencies)
-*[Identification and visualization of recurrently altered genes](identification-and-visualization-of-recurrently-altered-genes)
-*[Co-localization of breakpoints across orthogonal datasets](co-localization-of-breakpoints-across-orthogonal-datasets)
-*[Identification of shattered regions](identification-of-shattered-regions)
-*[Localization of shattered region hot spots in breast cancer](localization-of-shattered-region-hot-spots-in-breast-cancer)
-*[References](references)
+* [Introduction](introduction)
+* [Code availability](code-availability)
+* [Source of datasets used along this study](source-of-datasets-used-along-this-study)
+* [Genome-wide visualization of CNV frequencies](genome-wide-visualization-of-cnv-frequencies)
+* [Identification and visualization of recurrently altered genes](identification-and-visualization-of-recurrently-altered-genes)
+* [Co-localization of breakpoints across orthogonal datasets](co-localization-of-breakpoints-across-orthogonal-datasets)
+* [Identification of shattered regions](identification-of-shattered-regions)
+* [Localization of shattered region hot spots in breast cancer](localization-of-shattered-region-hot-spots-in-breast-cancer)
+* [References](references)
 
 
 ## Introduction
 
-
 The svpluscnv R package is designed for integrative analyses of somatic DNA copy number variations (CNV) and structural variants calls (SVC) derived from WGS discordant alignments to the reference genome in tumor/normal paired studies. svpluscnv comprises multiple analytical and visualization tools that can be applied to large datasets from cancer patients as well as cell lines. The whole code is written in R and it takes advantage of the algebra of genomic ranges implemented in the GenomicRanges package (Lawrence, et al., 2013) as well as Circular plotting implemented in Circlize package (Gu, et al., 2014). The package also makes use of genomic annotations including cytogenetic bands and gene RefSeq annotations obtained from  UCSC table browser (Karolchik, et al., 2004). Currently, two genome versions are supported: hg19/GRCh37 and hg38/GRCh38.
 
 ## Code availability
+
 The svpluscnv R package stable version source code is available in Bioconductor (*). In addition, the development version is also available in the GitHub repository (https://github.com/ccbiolab/svpluscnv). Accompanying svpluscnv code, we included a complete vignette describing all functionalities.
 In addition, the code and data used for this manuscript has been uploaded to a GitHub repository: https://github.com/ccbiolab/svpluscnv_doc_code. The stand-alone code allows reproduction of all figures and analyses mentioned in the manuscript by cloning the repository to a local site.
 
 ## Source of datasets used along this study
 
 We used 3 genomics data sources throughout this manuscript, all of which are encoded in the hg19/GRCh37 coordinate system; the three datasets allow a variety of usage modes depending on data availability:
-	Breast Cancer Cell line genomic data from CCLE (Ghandi, et al., 2019) organized by DepMap repository (https://depmap.org/portal/download/) includes CNVs and SVC from orthogonal sources:
-	SVC somatic SVs derived from 35 WGS sequenced cell lines were obtained from release 19Q2 (file name: CCLE_translocations_SvABA_20181221.csv.gz).
-	CNV profiles from release CCLE_copynumber_2013-12-03; we used the SNP6.0 arrays from 59 cell lines from the legacy version since the most recent releases included CNV profiles derived from different platforms that introduced considerable batch effect (data not shown).
-	TCGA data from Breast Cancer (brca) 1088 primary tumors were obtained from the hg19 GDC legacy archive (https://portal.gdc.cancer.gov/legacy-archive/). Profiles were derived from SNP6.0 arrays. This is the largest dataset, but only CNV data are available.
-	The PCAWG worldwide consortium for the analysis of cancer whole genomes (Consortium, 2020) comprises 198 Breast-Adenocarcinomas. These data derive from WGS and were downloaded from the consortium repository pages (https://dcc.icgc.org/releases/PCAWG). Although both CNV and SVC are available the source is not considered orthogonal:
-	SVC data were obtained from the consensus_sv folder and reformatted as svpluscnv input format. 
-	CNV segmentation profiles were derived from the file consensus.20170119.somatic.cna.annotated.tar.gz. In order to recreate logR values the consensus ‘total_cn’ CNV call was transformed: first, we added white noise (μ = 0; σ = 0.01). Next, we divided the copy number by 2 (for autosomal chromosomes and the female X chromosome only; the male sex chromosomes were not divided) and applied log2 transformation. 
+* Breast Cancer Cell line genomic data from CCLE (Ghandi, et al., 2019) organized by DepMap repository (https://depmap.org/portal/download/) includes CNVs and SVC from orthogonal sources:
+    * SVC somatic SVs derived from 35 WGS sequenced cell lines were obtained from release 19Q2 (file name: CCLE_translocations_SvABA_20181221.csv.gz).
+    * CNV profiles from release CCLE_copynumber_2013-12-03; we used the SNP6.0 arrays from 59 cell lines from the legacy version since the most recent releases included CNV profiles derived from different platforms that introduced considerable batch effect (data not shown).
+
+* TCGA data from Breast Cancer (brca) 1088 primary tumors were obtained from the hg19 GDC legacy archive (https://portal.gdc.cancer.gov/legacy-archive/). Profiles were derived from SNP6.0 arrays. This is the largest dataset, but only CNV data are available.
+
+* The PCAWG worldwide consortium for the analysis of cancer whole genomes (Consortium, 2020) comprises 198 Breast-Adenocarcinomas. These data derive from WGS and were downloaded from the consortium repository pages (https://dcc.icgc.org/releases/PCAWG). Although both CNV and SVC are available the source is not considered orthogonal:
+	* SVC data were obtained from the consensus_sv folder and reformatted as svpluscnv input format. 
+	* CNV segmentation profiles were derived from the file consensus.20170119.somatic.cna.annotated.tar.gz. In order to recreate logR values the consensus ‘total_cn’ CNV call was transformed: first, we added white noise (μ = 0; σ = 0.01). Next, we divided the copy number by 2 (for autosomal chromosomes and the female X chromosome only; the male sex chromosomes were not divided) and applied log2 transformation. 
 
 
 
@@ -430,66 +432,35 @@ load(url_brca_pcawg,verbose=TRUE)
 
 
 ## Genome-wide visualization of CNV frequencies
+
 To visualize CNV gain/loss frequencies across the genome, we used the cnv.freq function with arguments: fc.pct = 0.3, ploidy = TRUE. The function produces a 1Mb genomic binned table with gain/loss frequencies. The threshold fc.pct represents a percentage of the fold change in copy number dosage (e.g. 0.3 -> 30%). We applied the method to CCLE Breast (59 samples), TCGA brca (1088 samples) and PCAWG-Breast-AdenoCA (198 samples) (Supplementary Figure S1). Although the overall ploidy differs from among datasets, the overall shape is replicated.
 
 
 
 ```r
 par(mfrow=c(3,1),mar=c(3,4,1,4))
-cnv.freq(cnv_brca_ccle,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
-```
-
-```
-## An object of class cnvfreq from svpluscnv containing the following stats:
-##                 
-## Number of samples= 59 
-## Number of genomic bins = 2964
-```
-
-```r
+a <- cnv.freq(cnv_brca_ccle,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
 title("A", adj = 0, line = 0, cex=2)
-cnv.freq(cnv_brca_tcga,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
-```
-
-```
-## An object of class cnvfreq from svpluscnv containing the following stats:
-##                 
-## Number of samples= 1088 
-## Number of genomic bins = 2912
-```
-
-```r
+b <- cnv.freq(cnv_brca_tcga,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
 title("B", adj = 0, line = 0, cex=2)
-cnv.freq(cnv_brca_pcawg,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
-```
-
-```
-## An object of class cnvfreq from svpluscnv containing the following stats:
-##                 
-## Number of samples= 198 
-## Number of genomic bins = 3102
-```
-
-```r
+c <- cnv.freq(cnv_brca_pcawg,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
 title("C", adj = 0, line = 0, cex=2)
 ```
 
 <img src="figure/plot_vignette_1-1.png" title="Figure S1. Visualization of CNV frequencies with cnv.freq" alt="Figure S1. Visualization of CNV frequencies with cnv.freq" style="display: block; margin: auto;" />
 
-```r
-par(def.par)
-```
 
-**_Supplementary Figure S1. Visualization of CNV frequencies with cnv.freq_**
+
+**_Supplementary Figure S1. Visualization of CNV frequencies with cnv.freq. _**
 _CNV genome map indicating the frequency of gains (red) and losses(blue) across breast cancer datasets: (A) 59 breast cancer cell lines with available CNV profiles, (B) 1088 primary breast cancers TCGA samples with available CNV and (C) 198 Breast adenocarcinomas from the PCAWG consortium with available CNVs derived from WGS._
 
 
 ## Identification and visualization of recurrently altered genes
 
-Somatic pathogenic variants are characterized by presenting in recurrent patterns that differ across histotypes (Futreal, et al., 2004). Evaluating the recurrence of structural variations involve challenges as their interpretation is more complicated than other variant types (e.g. SNVs). Traditionally, CNVs have been used to detect dosage changes affecting whole genes (e.g. amplifications and deep-deletions) and their recurrence statistically evaluated (Mermel, et al., 2011). svpluscnv evaluates the recurrence of structural variants by focusing on the analysis of breakpoints overlapping with known genes, including sub-genic events (e.g. ATRX in frame fusion events (Kurihara, et al., 2014)) and their upstream and downstream regions that allow identification of recurrent events altering the function of oncogenes and tumor suppressors (e.g. rearrangements near TERT (Peifer, et al., 2015; Valentijn, et al., 2015)).
-The functions cnv.break.annot and svc.break.annot  evaluate breakpoints obtained from CNV and SVC data respectively. Both functions report a list of genes and their associated breakpoints and samples, which can be retrieved for further analyses. 
-We studied recurrently altered genes among the COSMIC cancer census (Futreal, et al., 2004) in the three breast datasets including CCLE (35 samples, SNPWGS), TCGA (1088 samples) and PCAWG (198). 11 genes appear in the top 20 in all three datasets whereas another 9 are present in at least 2 datasets (Supplementary Figure S2A-C). In the case of TCGA, the results were obtained from CNV data only whereas CCLE and PCAWG results represent the intersection between both CNV and SVC breakpoint analyses. 
-svcnvplus includes an integrated visualization tool sv.model.view that overlays data from CNV segmentation data and SVC calls. This function allows visualization of all variants affecting a specified genomic region (e.g. gene locus) at once. This functionality is complemented with a genomic track plot function (gene.track.view) that can be used to build layouts. To illustrate this functionality, we selected FHIT as the most frequently altered gene (n=8) in the subset of 35 CCLE breast cell lines with available CNV and SVC data. Observed breakpoints across CNV and SVC datatypes match correctly in all samples harboring SVs (Supplementary Figure S2D); this is remarkable since the data types were completely orthogonal in terms of data source and methodology.
+Somatic pathogenic variants are characterized by presenting in recurrent patterns that differ across histotypes (Futreal, et al., 2004). Evaluating the recurrence of structural variations involve challenges as their interpretation is more complicated than other variant types (e.g. SNVs). Traditionally, CNVs have been used to detect dosage changes affecting whole genes (e.g. amplifications and deep-deletions) and their recurrence statistically evaluated (Mermel, et al., 2011). svpluscnv evaluates the recurrence of structural variants by focusing on the analysis of breakpoints overlapping with known genes, including sub-genic events (e.g. ATRX in frame fusion events (Kurihara, et al., 2014)) and their upstream and downstream regions that allow identification of recurrent events altering the function of oncogenes and tumor suppressors (e.g. rearrangements near TERT (Peifer, et al., 2015; Valentijn, et al., 2015)).\n
+The functions cnv.break.annot and svc.break.annot  evaluate breakpoints obtained from CNV and SVC data respectively. Both functions report a list of genes and their associated breakpoints and samples, which can be retrieved for further analyses.\n
+We studied recurrently altered genes among the COSMIC cancer census (Futreal, et al., 2004) in the three breast datasets including CCLE (35 samples, SNPWGS), TCGA (1088 samples) and PCAWG (198). 11 genes appear in the top 20 in all three datasets whereas another 9 are present in at least 2 datasets (Supplementary Figure S2A-C). In the case of TCGA, the results were obtained from CNV data only whereas CCLE and PCAWG results represent the intersection between both CNV and SVC breakpoint analyses.\n
+svcnvplus includes an integrated visualization tool sv.model.view that overlays data from CNV segmentation data and SVC calls. This function allows visualization of all variants affecting a specified genomic region (e.g. gene locus) at once. This functionality is complemented with a genomic track plot function (gene.track.view) that can be used to build layouts. To illustrate this functionality, we selected FHIT as the most frequently altered gene (n=8) in the subset of 35 CCLE breast cell lines with available CNV and SVC data. Observed breakpoints across CNV and SVC datatypes match correctly in all samples harboring SVs (Supplementary Figure S2D); this is remarkable since the data types were completely orthogonal in terms of data source and methodology.\n
 
 
 ```r
@@ -677,9 +648,7 @@ gene.track.view(chr=chr ,start=start, stop=stop, addtext=TRUE, cex.text=1,
 
 <img src="figure/plot_vignette_2-1.png" title="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" alt="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" style="display: block; margin: auto;" />
 
-```r
-par(def.par)
-```
+
  
 **_Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines_**
 _(A-C) Recurrently altered genes based on breakpoints derived from CNV and SVC in 35 CCLE breast cell lines (A), CNV breakpoints in 1088 TCGA brca tumors (B) and CNV and SVC in 198 PCAWG breast adenocarcinomas (C); bars from genes present in the top 20 in two and three datasets colored in light-blue and blue respectively. (D) Visualization of orthogonal breakpoint data spanning FHIT genomic locus in 8 CCLE samples harboring variants; the top represents individual sample tracks where lines indicate SVC whereas the background color represents CNV. The bottom represents the known transcripts of FHIT._
@@ -704,9 +673,7 @@ title("B", adj = 0, line = -25, cex=2)
 
 <img src="figure/plot_vignette_3-1.png" title="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" alt="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" style="display: block; margin: auto;" />
 
-```r
-par(def.par)
-```
+
 
 
 **_Supplementary Figure S3. Validation of breakpoints from orthogonal sources_**
@@ -742,11 +709,11 @@ shreg_pcawg <- shattered.regions(cnv_brca_pcawg,svc_brca_pcawg,
 
 ## Localization of shattered region hot spots in breast cancer
 
-To establish whether certain regions suffer chromosome shattering, we aim to discard the null hypothesis that shattered regions appear in the genome at random. To this end, we evaluate the frequency at which genomic bins are classified as HBDs. First, shattered.regions returns a binary matrix of Nsamples by Nbins dimensions (0 = normal; 1 = HBD); the sum of each bin represents the observed frequency distribution. Second, freq.p.test generates a null frequency distribution by permutating the bins in each sample with I (iter = 100) iterations (null length = I x Nbins). The observed distribution is compared with the null distribution to obtain empirical p-values and corrected for multiple testing using available methods implemented in p.adjust function (R stats package) (e.g. method = "fdr"). The corrected p-values deemed statistically significant under a specified cutoff (e.g. p.cut = 0.05) define genomic bins under selection pressure for chromosome shattering.
+To establish whether certain regions suffer chromosome shattering, we aim to discard the null hypothesis that shattered regions appear in the genome at random. To this end, we evaluate the frequency at which genomic bins are classified as HBDs. First, shattered.regions returns a binary matrix of Nsamples by Nbins dimensions (0 = normal; 1 = HBD); the sum of each bin represents the observed frequency distribution. Second, freq.p.test generates a null frequency distribution by permutating the bins in each sample with I (iter = 100) iterations (null length = I x Nbins). The observed distribution is compared with the null distribution to obtain empirical p-values and corrected for multiple testing using available methods implemented in p.adjust function (R stats package) (e.g. method = "fdr"). The corrected p-values deemed statistically significant under a specified cutoff (e.g. p.cut = 0.05) define genomic bins under selection pressure for chromosome shattering.\n
 
-We tested this approach with the three Breast cancer and cell line datasets used along this study (CCLE SNPWGS = 35, TCGA SNP = 1088 and PCAWG WGS = 198). We first ran shattered.regions for CCLE and PCAWG and shattered.regions.cnv for TCGA. In each of the datasets, we evaluated the distribution of frequencies and obtained the frequency cutoff for FDR < 0.05 (Supplementary Figure S4A,C,E). Next, we mapped all shattered region frequencies along the genome with the function shattered.map.plot, which receives an object returned by shattered.regions or shattered.regions.cnv (Supplementary Figure S4B,D,F). The three genome wide maps identify similar hot-spots including: chr8.p11, chr8.q24, chr11q13, chr17q and chr20q. At least two of these regions encode well known oncogenes frequently amplified in cancer: MYC (chr8.q24) and CCND1 (chr11q13) (Santarius, et al., 2010).
+We tested this approach with the three Breast cancer and cell line datasets used along this study (CCLE SNPWGS = 35, TCGA SNP = 1088 and PCAWG WGS = 198). We first ran shattered.regions for CCLE and PCAWG and shattered.regions.cnv for TCGA. In each of the datasets, we evaluated the distribution of frequencies and obtained the frequency cutoff for FDR < 0.05 (Supplementary Figure S4A,C,E). Next, we mapped all shattered region frequencies along the genome with the function shattered.map.plot, which receives an object returned by shattered.regions or shattered.regions.cnv (Supplementary Figure S4B,D,F). The three genome wide maps identify similar hot-spots including: chr8.p11, chr8.q24, chr11q13, chr17q and chr20q. At least two of these regions encode well known oncogenes frequently amplified in cancer: MYC (chr8.q24) and CCND1 (chr11q13) (Santarius, et al., 2010).\n
 
-Finally, svpluscnv has a built-in utility function to extract the sample ids represented in each peak region (hot.spot.samples); at this point the user could further interrogate the functional implications of shattered regions.
+Finally, svpluscnv has a built-in utility function to extract the sample ids represented in each peak region (hot.spot.samples); at this point the user could further interrogate the functional implications of shattered regions.\n
 
 
 ```r
@@ -784,18 +751,16 @@ title("F", adj = 0, line = 1, cex=2)
 
 <img src="figure/plot_vignette_4-1.png" title="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" alt="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" style="display: block; margin: auto;" />
 
-```r
-par(def.par)
-```
+
  
 **_Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer_**
 _shattered.regions runs are evaluated using a permutation test (freq.p.test) (A,C,E) in order to map hot-spot regions (B,D,F) across three datasets: (A,B) 35 breast cancer cell lines with available WGS (structural variant calls) and SNP arrays (CNV calls), (C,D) 1088 primary breast cancers TCGA samples with available SNP6.0 arrays and (E,F) 198 Breast adenocarcinomas from the PCAWG consortium with available SVs and SNVs from WGS._
 
 
 For further description of svpluscnv functions and code, visit the available vignette:
-https://github.com/gonzolgarcia/svpluscnv
+https://github.com/gonzolgarcia/svpluscnv\n
 The code to reproduce figures and analyses is available here:
-https://github.com/ccbiolab/svpluscnv_doc_code
+https://github.com/ccbiolab/svpluscnv_doc_code\n
 
 ## References
 * Consortium, I.T.P.-C.A.o.W.G. Pan-cancer analysis of whole genomes. Nature 2020;578(7793):82-93.
