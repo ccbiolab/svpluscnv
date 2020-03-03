@@ -115,7 +115,7 @@ for(chr in unique(cnvdat$chrom)){
   if(verbose) cat("\r",chr)
 
   segchr <- cnvdat_short[which(cnvdat_short$chrom == chr),]
-  segchr.gr <- with(segchr, GRanges('chrom', IRanges(start=start, end=end)))
+  segchr.gr <- with(segchr, GRanges(chrom, IRanges(start=start, end=end)))
   hits = GenomicAlignments::findOverlaps(segchr.gr,segchr.gr)
   overlaps <- pintersect(segchr.gr[queryHits(hits)], segchr.gr[subjectHits(hits)])
   

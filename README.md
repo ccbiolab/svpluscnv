@@ -144,7 +144,7 @@ If the dataset represents samples with hyperploidy, the plot would be skewed. Th
 cnv_freq <- cnv.freq(cnv, fc.pct = 0.2, ploidy = FALSE, plot=TRUE)
 ```
 
-<img src="figure/plot1-1.png" title="Genome wide CNV frequencies" alt="Genome wide CNV frequencies" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_1-1.png" title="Genome wide CNV frequencies" alt="Genome wide CNV frequencies" style="display: block; margin: auto;" />
 
 ```r
 cnv_freq
@@ -170,7 +170,7 @@ heatmap.2(charm.mat[order(rownames(charm.mat))[1:42],],Rowv=NA,trace='none',cexC
         col=colorRampPalette(c("blue","white","red"))(256))
 ```
 
-<img src="figure/plot1.2-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_2-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto;" />
 
 ## Assessment of chromosomal instability
 
@@ -216,7 +216,7 @@ plot(dat2, xlab="percentage genome changed", ylab="log2(1+CNV break count)")
 legend("bottomright",paste("Spearman's cor=",sprintf("%.2f",cor(dat2,method="spearman")[1,2]), sep=""))
 ```
 
-<img src="figure/plot2-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_3-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto;" />
 
 
 
@@ -232,7 +232,7 @@ common.breaks <- match.breaks(cnv_breaks, svc_breaks,
                               plot = TRUE)
 ```
 
-<img src="figure/plot3-1.png" title="Common breakpoints by sample" alt="Common breakpoints by sample" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_4-1.png" title="Common breakpoints by sample" alt="Common breakpoints by sample" style="display: block; margin: auto;" />
 
 
 ## Identification of shattered regions
@@ -314,7 +314,7 @@ circ.chromo.plot(shatt_lung_cnv,sample.id = "SCLC21H_LUNG")
 circ.chromo.plot(shatt_lung,sample.id = "SCLC21H_LUNG")
 ```
 
-<img src="figure/plot4.1-1.png" title="Circos plot representing c LUNG cancer cell lines with chromothripsis" alt="Circos plot representing c LUNG cancer cell lines with chromothripsis" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_5-1.png" title="Circos plot representing c LUNG cancer cell lines with chromothripsis" alt="Circos plot representing c LUNG cancer cell lines with chromothripsis" style="display: block; margin: auto;" />
 
 
 
@@ -331,7 +331,7 @@ null.test <- freq.p.test(shatt_lung@high.density.regions.hc,
                          method="fdr", p.cut = 0.05)
 ```
 
-<img src="figure/plot4.2-1.png" title="Circos plot representing c LUNG cancer cell lines with chromothripsis" alt="Circos plot representing c LUNG cancer cell lines with chromothripsis" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_6-1.png" title="Circos plot representing c LUNG cancer cell lines with chromothripsis" alt="Circos plot representing c LUNG cancer cell lines with chromothripsis" style="display: block; margin: auto;" />
 
 \We can visualize the aggregate map of shattered regions for all samples with `shattered.map.plot`. The peaks that rise above `null.test$freq.cut` define recurrently shattered regions
 
@@ -340,7 +340,7 @@ null.test <- freq.p.test(shatt_lung@high.density.regions.hc,
 shattered.map.plot(shatt_lung, freq.cut = null.test@freq.cut)
 ```
 
-<img src="figure/plot5-1.png" title="Recurrently shattered regions map" alt="Recurrently shattered regions map" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_7-1.png" title="Recurrently shattered regions map" alt="Recurrently shattered regions map" style="display: block; margin: auto;" />
 
 And finally collect groups of samples with recurrent shattered regions as defined by the empirical test described above. 
 
@@ -392,7 +392,7 @@ barplot(amp_del_genes$deepdel.rank[1:20],col="blue",
         las=1,main="Candidate homozigously deleted genes",horiz=TRUE,xlab="#samples")
 ```
 
-<img src="figure/plot6-1.png" title="Recurrently altered genes with overlapping CNV breakpoints" alt="Recurrently altered genes with overlapping CNV breakpoints" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_8-1.png" title="Recurrently altered genes with overlapping CNV breakpoints" alt="Recurrently altered genes with overlapping CNV breakpoints" style="display: block; margin: auto;" />
 
 
 
@@ -423,7 +423,7 @@ barplot(rev(sort(unlist(lapply(disruptSamples,length)),decreasing=TRUE)[1:20]),h
 barplot(rev(sort(unlist(lapply(upstreamSamples,length)),decreasing=TRUE)[1:20]),horiz=TRUE,las=1)
 ```
 
-<img src="figure/plot7-1.png" title="Recurrently altered genes with overlapping CNV breakpoints" alt="Recurrently altered genes with overlapping CNV breakpoints" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_9-1.png" title="Recurrently altered genes with overlapping CNV breakpoints" alt="Recurrently altered genes with overlapping CNV breakpoints" style="display: block; margin: auto;" />
 
 
 
@@ -453,7 +453,7 @@ gene.track.view(chrom=chrom ,start=start, stop=stop, addtext=TRUE, cex.text=1,
                 summary = FALSE)
 ```
 
-<img src="figure/plot9-1.png" title="Visualizaion of structural variants in PTPRD" alt="Visualizaion of structural variants in PTPRD" style="display: block; margin: auto;" />
+<img src="figure/plot_readme_10-1.png" title="Visualizaion of structural variants in PTPRD" alt="Visualizaion of structural variants in PTPRD" style="display: block; margin: auto;" />
 
 
 

@@ -258,7 +258,7 @@ if(!is.null(genesgr)){
 cnv_breaks <- cnv.breaks(cnv, fc.pct = fc.pct, min.cnv.size = min.cnv.size, min.num.probes = min.num.probes, break.width=break.width,
                          low.cov = low.cov, clean.brk = clean.brk, verbose=verbose)
     
-breaksgr = with(cnv_breaks@breaks, GRanges('chrom', IRanges(start=pos, end=pos), sampleid=cnv_breaks@breaks$sample, uid=cnv_breaks@breaks$uid))
+breaksgr = with(cnv_breaks@breaks, GRanges(chrom, IRanges(start=pos, end=pos), sampleid=cnv_breaks@breaks$sample, uid=cnv_breaks@breaks$uid))
 
 if(verbose) message("Finding gene disrupting CNV breakpoint")
 disrupt <- geneBreakOverlap(genesgr, breaksgr)

@@ -40,9 +40,9 @@ chr.arm.cnv <- function(cnv,
   
     chrarms <- chrarms[which(chrarms$end -chrarms$start > 0),]
 
-    chrarmsGR <- with(chrarms,GRanges('chrom', IRanges(start=start, end=end)))
+    chrarmsGR <- with(chrarms,GRanges(chrom, IRanges(start=start, end=end)))
 
-    cnvdat_gr <- with(cnvdat, GRanges('chrom', IRanges(start=start, end=end)))
+    cnvdat_gr <- with(cnvdat, GRanges(chrom, IRanges(start=start, end=end)))
     hits <- GenomicAlignments::findOverlaps(chrarmsGR,cnvdat_gr)
   
     armcnvmat <- matrix(ncol=length(unique(cnvdat$sample)), nrow=nrow(chrarms) )
