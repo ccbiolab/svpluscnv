@@ -29,25 +29,19 @@ def.par <- par(no.readonly = TRUE)
 
 ## Table of Contents:
 
-* [Introduction](introduction)
-* [Code availability](code-availability)
-* [Source of datasets used along this study](source-of-datasets-used-along-this-study)
-* [Genome-wide visualization of CNV frequencies](genome-wide-visualization-of-cnv-frequencies)
-* [Identification and visualization of recurrently altered genes](identification-and-visualization-of-recurrently-altered-genes)
-* [Co-localization of breakpoints across orthogonal datasets](co-localization-of-breakpoints-across-orthogonal-datasets)
-* [Identification of shattered regions](identification-of-shattered-regions)
-* [Localization of shattered region hot spots in breast cancer](localization-of-shattered-region-hot-spots-in-breast-cancer)
-* [References](references)
+* [Introduction](#introduction)
+* [Source of datasets used along this study](#source-of-datasets-used-along-this-study)
+* [Genome-wide visualization of CNV frequencies](#genome-wide-visualization-of-cnv-frequencies)
+* [Identification and visualization of recurrently altered genes](#identification-and-visualization-of-recurrently-altered-genes)
+* [Co-localization of breakpoints across orthogonal datasets](#co-localization-of-breakpoints-across-orthogonal-datasets)
+* [Identification of shattered regions](#identification-of-shattered-regions)
+* [Localization of shattered region hot spots in breast cancer](#localization-of-shattered-region-hot-spots-in-breast-cancer)
+* [References](#references)
 
 
 ## Introduction
 
 The svpluscnv R package is designed for integrative analyses of somatic DNA copy number variations (CNV) and structural variants calls (SVC) derived from WGS discordant alignments to the reference genome in tumor/normal paired studies. svpluscnv comprises multiple analytical and visualization tools that can be applied to large datasets from cancer patients as well as cell lines. The whole code is written in R and it takes advantage of the algebra of genomic ranges implemented in the GenomicRanges package (Lawrence, et al., 2013) as well as Circular plotting implemented in Circlize package (Gu, et al., 2014). The package also makes use of genomic annotations including cytogenetic bands and gene RefSeq annotations obtained from  UCSC table browser (Karolchik, et al., 2004). Currently, two genome versions are supported: hg19/GRCh37 and hg38/GRCh38.
-
-## Code availability
-
-The svpluscnv R package stable version source code is available in Bioconductor (*). In addition, the development version is also available in the GitHub repository (https://github.com/ccbiolab/svpluscnv). Accompanying svpluscnv code, we included a complete vignette describing all functionalities.
-In addition, the code and data used for this manuscript has been uploaded to a GitHub repository: https://github.com/ccbiolab/svpluscnv_doc_code. The stand-alone code allows reproduction of all figures and analyses mentioned in the manuscript by cloning the repository to a local site.
 
 ## Source of datasets used along this study
 
@@ -97,7 +91,7 @@ title("C", adj = 0, line = 0, cex=2)
 par(def.par)
 ```
 
-**_Supplementary Figure S1. Visualization of CNV frequencies with cnv.freq. _**
+**_Supplementary Figure S1. Visualization of CNV frequencies with cnv.freq._**
 _CNV genome map indicating the frequency of gains (red) and losses(blue) across breast cancer datasets: (A) 59 breast cancer cell lines with available CNV profiles, (B) 1088 primary breast cancers TCGA samples with available CNV and (C) 198 Breast adenocarcinomas from the PCAWG consortium with available CNVs derived from WGS._
 
 
@@ -118,10 +112,12 @@ load(url_cosmic_census,verbose=TRUE)
 cnv_annot_ccle <- cnv.break.annot(cnv_brca_ccle, 
                                fc.pct = 0, 
                                genome.v="hg19",
-                               clean.brk = 8)
+                               clean.brk = 8,
+                               verbose=FALSE)
 svc_annot_ccle <- svc.break.annot(svc_brca_ccle, 
                                svc.seg.size = 200000, 
-                               genome.v="hg19")
+                               genome.v="hg19",
+                               verbose=FALSE)
 # combine CNV and SVC and filter by cosmic genes
 disruptSamplesCCLE <- merge2lists(cnv_annot_ccle@disruptSamples,svc_annot_ccle@disruptSamples, fun="intersect")
 disruptSamplesCCLE_cosmic <- disruptSamplesCCLE[intersect(names(disruptSamplesCCLE),cosmic_cancer_census_v90$Gene.Symbol)]
@@ -132,7 +128,8 @@ ccle_plot_genes <- rev(sort(unlist(lapply(disruptSamplesCCLE_cosmic,length)),dec
 cnv_annot_tcga <- cnv.break.annot(cnv_brca_tcga, 
                                   fc.pct = 0, 
                                   genome.v="hg19", 
-                                  clean.brk = 8)
+                                  clean.brk = 8,
+                                  verbose=FALSE)
 # filter by cosmic genes
 disruptSamplesTCGA <- cnv_annot_tcga@disruptSamples
 disruptSamplesTCGA_cosmic <- disruptSamplesTCGA[intersect(names(disruptSamplesTCGA),cosmic_cancer_census_v90$Gene.Symbol)]
@@ -143,7 +140,8 @@ tcga_plot_genes <- rev(sort(unlist(lapply(disruptSamplesTCGA_cosmic,length)),dec
 cnv_annot_pcawg <- cnv.break.annot(cnv_brca_pcawg, 
                                    fc.pct = 0,
                                    genome.v="hg19", 
-                                   clean.brk = 8)
+                                   clean.brk = 8,
+                                   verbose=FALSE)
 svc_annot_pcawg <- svc.break.annot(svc_brca_pcawg, 
                                    svc.seg.size = 200000, 
                                    genome.v="hg19", 
@@ -205,7 +203,7 @@ gene.track.view(chr=chr ,start=start, stop=stop, addtext=TRUE, cex.text=1,
 par(def.par)
 ```
  
-**_Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines_**
+**_Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines._**
 _(A-C) Recurrently altered genes based on breakpoints derived from CNV and SVC in 35 CCLE breast cell lines (A), CNV breakpoints in 1088 TCGA brca tumors (B) and CNV and SVC in 198 PCAWG breast adenocarcinomas (C); bars from genes present in the top 20 in two and three datasets colored in light-blue and blue respectively. (D) Visualization of orthogonal breakpoint data spanning FHIT genomic locus in 8 CCLE samples harboring variants; the top represents individual sample tracks where lines indicate SVC whereas the background color represents CNV. The bottom represents the known transcripts of FHIT._
 
 
@@ -231,7 +229,7 @@ par(def.par)
 ```
 
 
-**_Supplementary Figure S3. Validation of breakpoints from orthogonal sources_**
+**_Supplementary Figure S3. Validation of breakpoints from orthogonal sources._**
 _Per sample comparison of breakpoints; each bar plot represents the number of breakpoints in a given dataset that have colocalizing breakpoints in the orthogonal dataset. (A) Breakpoints from SVC (WGS) validated in CNV segmentation (SNP) data. (B) Breakpoints in CNV segmentation data validated in SVC._
 	
  
@@ -307,14 +305,11 @@ title("F", adj = 0, line = 1, cex=2)
 par(def.par)
 ```
  
-**_Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer_**
+**_Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer._**
 _shattered.regions runs are evaluated using a permutation test (freq.p.test) (A,C,E) in order to map hot-spot regions (B,D,F) across three datasets: (A,B) 35 breast cancer cell lines with available WGS (structural variant calls) and SNP arrays (CNV calls), (C,D) 1088 primary breast cancers TCGA samples with available SNP6.0 arrays and (E,F) 198 Breast adenocarcinomas from the PCAWG consortium with available SVs and SNVs from WGS._
 
-
-For further description of svpluscnv functions and code, visit the available vignette:
-https://github.com/gonzolgarcia/svpluscnv\n
-The code to reproduce figures and analyses is available here:
-https://github.com/ccbiolab/svpluscnv_doc_code\n
+The code and data in this vignette is also available here:\n
+https://github.com/ccbiolab/svpluscnv_doc_code 
 
 ## References
 * Consortium, I.T.P.-C.A.o.W.G. Pan-cancer analysis of whole genomes. Nature 2020;578(7793):82-93.
