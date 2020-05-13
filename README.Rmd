@@ -184,11 +184,13 @@ Mutational processes underlying structural variation may invove different mechan
 ```{r plot_readme_3b, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
 svc.brk.iqm <- brk.burden.iqm(svc_breaks)
+svc.brk.iqm@plot
 ```
 
 ```{r plot_readme_3c, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
 cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
+cnv.brk.iqm@plot
 ```
 
 ```{r plot_readme_3d, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
