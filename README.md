@@ -569,6 +569,7 @@ Mutational processes underlying structural variation may invove different mechan
 
 ```r
 # SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
 svc.brk.iqm <- brk.burden.iqm(svc_breaks)
 ```
 
@@ -577,6 +578,7 @@ svc.brk.iqm <- brk.burden.iqm(svc_breaks)
 
 ```r
 # SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
 cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
 ```
 

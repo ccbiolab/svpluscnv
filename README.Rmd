@@ -181,13 +181,15 @@ legend("bottomright",paste("Spearman's cor=",sprintf("%.2f",cor(dat2,method="spe
 
 Mutational processes underlying structural variation may invove different mechanisms and presentations. Specificaly some tumors present accumulation of breakpoints in local regions due to catastrophic events (e.g. chromothripsis, chromoplexia) while others show near-random distribution across the genome. Here we introduce a breakpoint burden measure robust against local phenomena and outliers. The function `brk.burden.iqm` ontains measures of breakpoint density for eacg chromosome arm, then the inter quantile mean (`svpluscnv::IQM`) across all chromosome arms is computed and reported.
 
-```{r plot_readme_3b, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+```{r plot_readme_3b, fig.width=12, fig.height=4, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
 svc.brk.iqm <- brk.burden.iqm(svc_breaks)
 ```
 
-```{r plot_readme_3c, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+```{r plot_readme_3c, fig.width=12, fig.height=4, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
 cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
 ```
 
