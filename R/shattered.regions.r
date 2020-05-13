@@ -59,6 +59,7 @@ setMethod("show","chromo.regs",function(object){
 setGeneric("hbd.mat", function(object, conf="hc") standardGeneric("hbd.mat"))
 
 #' @rdname hbd.mat-methods
+#' @export
 
 setMethod("hbd.mat", "chromo.regs", function(object, conf="hc"){ 
     if(conf == "hc"){

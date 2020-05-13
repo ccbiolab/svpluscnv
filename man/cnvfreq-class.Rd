@@ -6,9 +6,13 @@
 \alias{cnvfreq}
 \title{Data class cnvfreq}
 \arguments{
-\item{freqsum}{(data.frame): the frequency of gains and losses in each defined genomic bin}
+\item{freqsum}{(data.table): the frequency of gains and losses in each defined genomic bin}
+
+\item{chrlimits}{(data.frame): a table containing the chromosome limit coordinates and global genomic coordinates}
 
 \item{bin.mat}{(numeric): a matrix of genomic bins versus samples}
+
+\item{plot}{(graphical): a recorded plot object}
 
 \item{param}{(list): a list of parametres provided}
 }
