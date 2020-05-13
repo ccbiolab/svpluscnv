@@ -184,13 +184,11 @@ Mutational processes underlying structural variation may invove different mechan
 ```{r plot_readme_3b, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
 svc.brk.iqm <- brk.burden.iqm(svc_breaks)
-svc.brk.iqm@plot
 ```
 
 ```{r plot_readme_3c, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # SVC corrected breakpoint burden
 cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
-cnv.brk.iqm@plot
 ```
 
 ```{r plot_readme_3d, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
@@ -290,7 +288,7 @@ par(def.par)
 To establish whether certain regions suffer chromosome shattering above expectation, we evaluate the null hypothesis that shattered regions occur throughout the genome at random; To this end we first create an empirical null distribution based on the sample set under study. The null is then compared with the observed distribution (`shatt_lung_cnv$high.density.regions.hc`) to obtain empirical adjusted p-values. The bins with corrected p-values deemed statistically significant define regions under selection pressure for chromosome shattering. Since the genomic bins might span low coverage regions where no CNV or SVs are mapped we removed remove bins with frequency = 0 setting the `zerofreq=TRUE`.
 
 ```{r plot_readme_6, fig.width=9, fig.height=5, fig.align='left', fig.cap = "Circos plot representing c LUNG cancer cell lines with chromothripsis",  message=FALSE}
-set.seed<-1234
+set.seed(12345678)
 null.test <- freq.p.test(shatt_lung@high.density.regions.hc, 
                          method="fdr", p.cut = 0.05)
 ```

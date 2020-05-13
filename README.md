@@ -570,15 +570,17 @@ Mutational processes underlying structural variation may invove different mechan
 ```r
 # SVC corrected breakpoint burden
 svc.brk.iqm <- brk.burden.iqm(svc_breaks)
-svc.brk.iqm@plot
 ```
+
+<img src="figure/plot_readme_3b-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto auto auto 0;" />
 
 
 ```r
 # SVC corrected breakpoint burden
 cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
-cnv.brk.iqm@plot
 ```
+
+<img src="figure/plot_readme_3c-1.png" title="SV versus CNV breakpoint burden" alt="SV versus CNV breakpoint burden" style="display: block; margin: auto auto auto 0;" />
 
 
 ```r
@@ -702,7 +704,7 @@ To establish whether certain regions suffer chromosome shattering above expectat
 
 
 ```r
-set.seed<-1234
+set.seed(12345678)
 null.test <- freq.p.test(shatt_lung@high.density.regions.hc, 
                          method="fdr", p.cut = 0.05)
 ```

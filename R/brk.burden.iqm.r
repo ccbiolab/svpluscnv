@@ -134,9 +134,7 @@ datacolor <- unlist(sapply(names(arm.brk.iqm), function(i) rep(sample.col[i], le
 names(datacolor) <- names(datavector)
 
 # plot 
-graphics.off()
-def.par <- par(no.readonly = TRUE)
-par(mar=c(1,7,1,2),family="sans")
+
 npoints <- length(template)
 plot(datavector,pch=20,xaxt='n',yaxt='n',col="white",xlab="",ylab='',
      xaxt='n',bty='n',xlim=c(100,length(datavector)-100))
@@ -155,9 +153,8 @@ mtext(paste("log10(1+breaks/",bp.unit,")",sep=""),side=2,line=4,cex=1.3)
 lines(seq(npoints/2,length(datavector),length(datavector)/length(arm.brk.iqm)),log2(1+arm.brk.iqm) )
 # save plot
 p <- recordPlot()
-par(def.par)
 
- nbreaks <- table(brk@breaks$sample)[names(arm.brk.iqm)]
+nbreaks <- table(brk@breaks$sample)[names(arm.brk.iqm)]
 nbreaks.map <- unlist(total.brk)[names(arm.brk.iqm)]
 brk.dens <- (nbreaks.map*bp.unit/sum(arm.size))[names(arm.brk.iqm)]
 
