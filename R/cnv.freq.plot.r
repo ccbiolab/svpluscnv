@@ -37,6 +37,7 @@ setMethod("show","cnvfreq",function(object){
 #' @param g.bin (numeric) size in megabases of the genmome bin to compute break density 
 #' @param sampleids (character) vector containing list of samples to include in plot. if set to NULL, all samples in the input will be used
 #' @param cex.axis,cex.lab,label.line (numeric) plot parameters
+#' @param plot (logical) whether produce a graphical output
 #' @param verbose (logical) whether to return internal messages
 #' @return an instance of the class 'cnvfreq' and optionally a plot into open device
 #' @keywords CNV, segmentation, plot
@@ -57,6 +58,7 @@ cnv.freq <- function(cnv,
                      cex.axis= 1,
                      cex.lab= 1,
                      label.line= -1.2,
+                     plot=TRUE,
                      verbose=TRUE){
   
 stopifnot(cnv@type == "cnv")
@@ -138,7 +140,8 @@ for(chr in rownames(chrlimits)){
   outmat_loss[which(outmat < log2(1-fc.pct), arr.ind=TRUE)] <-  1
   freq.gains <- apply(outmat_gain,1,sum)/nsamples
   freq.loss <- apply(outmat_loss,1,sum)/nsamples
-  
+
+if(plot){
     plot.end<- chrlimits$offset[nrow(chrlimits)]+chrlimits$end[nrow(chrlimits)]
     bin.loc <- chrlimits[chrbins.df[names(freq.gains),on="binid"]$chr,"offset"] + chrbins.df[names(freq.gains),,on="binid"]$start
 
@@ -160,6 +163,9 @@ for(chr in rownames(chrlimits)){
     axis(4,c(100,50,0,50,100),at=c(-1,-0.5,0,0.5,1),las=1,pos=plot.end, cex.axis=cex.axis)
     axis(2,c(nsamples,round(nsamples/2),0,round(nsamples/2),nsamples),at=c(-1,-0.5,0,0.5,1),las=1, pos=0, cex.axis=cex.axis)
     p <- recordPlot()
+}else{
+  p <- recordPlot(load=NULL, attach=NULL)
+}
 
 
 summary <- data.table(chrbins.df[,c("chr","start","end")],bin.loc,freq.gains,freq.loss)

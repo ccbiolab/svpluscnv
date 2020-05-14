@@ -35,6 +35,7 @@ setMethod("show","break.iqm",function(object){
 #' @param genome.v (hg19 or hg38) reference genome version to draw chromosome limits and centromeres
 #' @param min.arm.size (numeric) minimum size in base pairs for a chromosome arm to be included in the analysis. Size will be calculated based on the 'genome.v' centromere location (excluding centromere bands). Chromosome start and en locations can be provided in 'chr.lim'.
 #' @param bp.unit (numeric) The genomic size unit in base pairs to report brekpoint densities. This parameter is also used for the y axis of the plot. 
+#' @param plot (logical) whether produce a graphical output
 #' @param verbose (logical) whether to return internal messages
 #' @return an instance of the class 'cnvfreq' and optionally a plot into open device
 #' @keywords structural variants, mutational burden, chromosomal instability
@@ -61,18 +62,21 @@ brk.burden.iqm <- function(brk,
     
 stopifnot(isS4(brk))
 
+# fetch citogenetic bands from genome version (D3GB)
 if(genome.v %in% c("GRCh37","hg19")){ 
     bands <- remove.factors(GRCh37.bands)
 }else if(genome.v %in% c("GRCh38","hg38")){
     bands <- remove.factors(GRCh38.bands)
 }else{stop("Genome version not provided")}
     
+# define default chromosome arm boundaries 
 centromeres_start <- bands[intersect(which(bands$score == "acen"),grep("q",bands$name)),"start"]
 centromeres_end <- bands[intersect(which(bands$score == "acen"),grep("q",bands$name)),"end"]
 chromosome_start <- sapply(as.character(unique(bands$chr)), function(i) min( bands$start[which(bands$chr == i)] ))
 chromosome_end <- sapply(as.character(unique(bands$chr)), function(i) max( bands$end[which(bands$chr == i)] ))
 names(chromosome_start) <-  names(chromosome_end) <-  names(centromeres_start) <-  names(centromeres_end) <- paste("chr",bands[intersect(which(bands$score == "acen"),grep("q",bands$name)),"chr"],sep="")
     
+# define chromosome arm boundaries based on provided chromosome limits
 if(!is.null(chr.lim)){
     centromeres_start <- centromeres_start[chr.lim$chrom]
     centromeres_end <- centromeres_end[chr.lim$chrom]
@@ -85,6 +89,7 @@ if(!is.null(chr.lim)){
     colnames(chr.lim) <- c("chrom","begin","end")
 }
     
+# obtain number of breakpoints per sample mapped onto chromosome arms 
 mapped_p <- names(which(centromeres_start -chromosome_start > min.arm.size))
 mapped_q <- names(which(chromosome_end -centromeres_end > min.arm.size))
 p.arm.df <- data.frame(mapped_p,chromosome_start[mapped_p],centromeres_start[mapped_p])
@@ -119,8 +124,10 @@ for(sample.id  in names(arm.brk.dens)){
     total.brk[[sample.id]] <- sum(input)
 }
 
+# claculate IQM for each sample
 arm.brk.iqm <- log10(1+sort(unlist(lapply(arm.brk.dens,IQM))))
 
+# obtain gradient of default colors
 if(is.null(sample.col)){
     sample.col <- rep("green",length(unique(brk@breaks$sample)))
     names(sample.col) <- unique(brk@breaks$sample)
@@ -129,31 +136,37 @@ if(is.null(sample.col)){
     sample.col[names(sample.col.tmp)] <- sample.col.tmp
     }
 
-datavector <- log10(1+unlist(lapply(arm.brk.dens[names(arm.brk.iqm)],sort)))
-datacolor <- unlist(sapply(names(arm.brk.iqm), function(i) rep(sample.col[i], length(template)),simplify=FALSE))
-names(datacolor) <- names(datavector)
-
 # plot 
 
-npoints <- length(template)
-plot(datavector,pch=20,xaxt='n',yaxt='n',col="white",xlab="",ylab='',
-     xaxt='n',bty='n',xlim=c(100,length(datavector)-100))
-altcol<-"grey95"
-for(i in 1:length(arm.brk.dens)){ 
-    rect((i-1)*npoints,-10,i*npoints,50,col=altcol,border=NA)
-    if(altcol == "grey95"){ altcol <- "grey85"
-    }else{altcol <- "grey95"}
+if(plot){
+    datavector <- log10(1+unlist(lapply(arm.brk.dens[names(arm.brk.iqm)],sort)))
+    datacolor <- unlist(sapply(names(arm.brk.iqm), function(i) rep(sample.col[i], length(template)),simplify=FALSE))
+    names(datacolor) <- names(datavector)
+    
+    npoints <- length(template)
+    plot(datavector,pch=20,xaxt='n',yaxt='n',col="white",xlab="",ylab='',
+         xaxt='n',bty='n',xlim=c(100,length(datavector)-100))
+    altcol<-"grey95"
+    for(i in 1:length(arm.brk.dens)){ 
+        rect((i-1)*npoints,-10,i*npoints,50,col=altcol,border=NA)
+        if(altcol == "grey95"){ altcol <- "grey85"
+        }else{altcol <- "grey95"}
+    }
+    abline(h=seq(-2,6,0.5),lty=1,lwd=.2,col="black")
+    
+    points(datavector,pch=20,cex=0.3,col=datacolor)
+    axis(2,labels=sprintf("%.2f",10^(seq(-2,4,0.5))-1),at=seq(-2,4,0.5),las=3,family="Courier",font=1,line=0,cex.axis=1.2,las=1)
+
+    mtext(paste("log10(1+breaks/",bp.unit,")",sep=""),side=2,line=4,cex=1.3)
+    lines(seq(npoints/2,length(datavector),length(datavector)/length(arm.brk.iqm)),log2(1+arm.brk.iqm) )
+    p <- recordPlot()
+}else{
+    p <- recordPlot(load=NULL, attach=NULL)
 }
-abline(h=seq(-2,6,0.5),lty=1,lwd=.2,col="black")
 
-points(datavector,pch=20,cex=0.3,col=datacolor)
-axis(2,labels=sprintf("%.2f",10^(seq(-2,4,0.5))-1),at=seq(-2,4,0.5),las=3,family="Courier",font=1,line=0,cex.axis=1.2,las=1)
-
-mtext(paste("log10(1+breaks/",bp.unit,")",sep=""),side=2,line=4,cex=1.3)
-lines(seq(npoints/2,length(datavector),length(datavector)/length(arm.brk.iqm)),log2(1+arm.brk.iqm) )
 # save plot
-p <- recordPlot()
 
+# create summary 
 nbreaks <- table(brk@breaks$sample)[names(arm.brk.iqm)]
 nbreaks.map <- unlist(total.brk)[names(arm.brk.iqm)]
 brk.dens <- (nbreaks.map*bp.unit/sum(arm.size))[names(arm.brk.iqm)]
