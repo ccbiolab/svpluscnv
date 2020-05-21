@@ -676,7 +676,7 @@ Finally, svpluscnv has a built-in utility function to extract the sample ids rep
 
 ```r
 #set a seed to lock randomization
-set.seed=1234
+set.seed(1234)
 
 # evaluate hotspots and plot shattered region maps for each dataset
 

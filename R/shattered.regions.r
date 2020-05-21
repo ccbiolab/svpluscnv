@@ -341,18 +341,19 @@ shattered.regions <- function(cnv,
   sddata3[names(apply(cnvbrk.common.dens,1,IQSD,lowQ=.1,upQ=.9))]  <- apply(cnvbrk.common.dens,1,IQSD,lowQ=.1,upQ=.9)
   
   
-  a <- sapply(commonSamples, function(i) names(which(cnvbrk.dens[i,] > iqmdata1[i]+num.cnv.sd*sddata1[i] )))
-  b <- sapply(commonSamples, function(i) names(which(cnvbrk.dens[i,] >= num.cnv.breaks)))
-  c <- sapply(commonSamples, function(i) names(which(svcbrk.dens[i,] > iqmdata2[i]+num.svc.sd*sddata2[i] )))
-  d <- sapply(commonSamples, function(i) names(which(svcbrk.dens[i,] >= num.svc.breaks)))
-  e <- sapply(commonSamples, function(i) names(which(cnvbrk.common.dens[i,] > iqmdata3[i]+num.common.sd*sddata3[i] )))
-  f <- sapply(commonSamples, function(i) names(which(cnvbrk.common.dens[i,] >= num.common.breaks)))
+  a <- sapply(commonSamples, function(i) names(which(cnvbrk.dens[i,] > iqmdata1[i]+num.cnv.sd*sddata1[i] )),simplify=FALSE)
+  b <- sapply(commonSamples, function(i) names(which(cnvbrk.dens[i,] >= num.cnv.breaks)),simplify=FALSE)
+  c <- sapply(commonSamples, function(i) names(which(svcbrk.dens[i,] > iqmdata2[i]+num.svc.sd*sddata2[i] )),simplify=FALSE)
+  d <- sapply(commonSamples, function(i) names(which(svcbrk.dens[i,] >= num.svc.breaks)),simplify=FALSE)
+  e <- sapply(commonSamples, function(i) names(which(cnvbrk.common.dens[i,] > iqmdata3[i]+num.common.sd*sddata3[i] )),simplify=FALSE)
+  f <- sapply(commonSamples, function(i) names(which(cnvbrk.common.dens[i,] >= num.common.breaks)),simplify=FALSE)
   
   
   # condition for chromothripsis: at least n=breaks > 6 (svc SND cnv)  AND n-breaks > u+2*sd (svc AND cnv) 
   res <- sapply(commonSamples,function(i) Reduce(intersect, list(a[[i]],b[[i]],c[[i]],d[[i]],e[[i]],f[[i]])))
-
-  highDensityRegions <- cnvbrk.dens[commonSamples,]
+  
+  highDensityRegions <- rbind(cnvbrk.dens[commonSamples,])
+  if(length(commonSamples == 1)) rownames(highDensityRegions) <- commonSamples
   highDensityRegions[] <- 0
   for(cl in commonSamples) highDensityRegions[cl,res[[cl]]] <- 1
   
