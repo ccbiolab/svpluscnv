@@ -23,7 +23,7 @@ graphics.off()
 def.par <- par(no.readonly = TRUE)
 ```
 
-## svncvplus: R toolkit for the analysis of structural variants and complex genomic rearrangements
+## svpluscnv: R toolkit for the analysis of structural variants and complex genomic rearrangements
 
 `svpluscnv` is an R package designed for integrative analyses of somatic DNA copy number variations (CNV) and other structural variants (SV).`svpluscnv` comprises multiple analytical and visualization tools that can be applied to large datasets from cancer patients such as [TCGA](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga) and [PCAWG](https://dcc.icgc.org/releases/PCAWG) or cancer cell lines [CCLE](https://portals.broadinstitute.org/ccle).
   
