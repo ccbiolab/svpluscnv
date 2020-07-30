@@ -30,8 +30,8 @@ setMethod("show","genecnv",function(object){
 #' Obtains a gene-level copy number matrix from a segmentation profile.
 #'  
 #' @param cnv (S4) an object of class svcnvio containing data type 'cnv' initialized by validate.cnv
-#' @param genome.v (hg19 or hg38) reference genome version to draw chromosome limits and centromeres
-#' @param genesgr (S4) a GenomicRanges object containing gene annotations (if not NULL overides genome.v). It must containg 'strand' and a metadata field 'gene_id' with unique values. Seqnames are expected in the format (chr1, chr2, ...) 
+#' @param genome.v (hg19 or hg38) reference genome version to fetch gene annotations when 'genesgr=NULL'
+#' @param genesgr (S4) a GenomicRanges object containing genomic feature annotations (if not NULL overides genome.v). It must containg 'strand' and a metadata field 'gene_id' with unique values. Seqnames are expected in the format (chr1, chr2, ...) 
 #' @param chrlist (character) list of chromosomes to include chr1, chr2, etc...
 #' @param fill.gaps (logical) whether to fill the gaps in the segmentation file using gap neighbour segmean average as log ratio
 #' @param verbose (logical) 
@@ -91,6 +91,7 @@ newfunc <- function(dfi) {
 
 b<- lapply(a, function(x) newfunc(x)[genesgr@elementMetadata$gene_id] )
 cnvmat <- do.call(cbind,b)
+rownames(cnvmat) <- genesgr@elementMetadata$gene_id
 
 out <- genecnv(
     cnvmat=cnvmat,

@@ -4,7 +4,9 @@
 \name{svdat_lung_ccle}
 \alias{svdat_lung_ccle}
 \title{Lung CCLE SVC data}
-\format{An object of class \code{data.frame} with 23040 rows and 8 columns.}
+\format{
+An object of class \code{data.frame} with 23040 rows and 8 columns.
+}
 \usage{
 svdat_lung_ccle
 }

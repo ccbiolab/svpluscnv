@@ -2,15 +2,19 @@
 #' 
 #' Class to store breakpoint annotations in association with genomic features (e.g. gene loci)
 #' 
-#' @param freqsum (data.frame): the frequency of gains and losses in each defined genomic bin
+#' @param freqsum (data.table): the frequency of gains and losses in each defined genomic bin
+#' @param chrlimits (data.frame): a table containing the chromosome limit coordinates and global genomic coordinates
 #' @param bin.mat (numeric): a matrix of genomic bins versus samples
+#' @param plot (graphical): a recorded plot object
 #' @param param (list): a list of parametres provided 
 #' @return an instance of the class 'cnvfreq' 
 #' @export
 
 cnvfreq <- setClass("cnvfreq", representation(
     freqsum  = "data.table",
+    chrlimits = "data.frame",
     bin.mat = "matrix",
+    plot = "recordedplot",
     param = "list"
 ))
 
@@ -25,6 +29,7 @@ setMethod("show","cnvfreq",function(object){
 #' CNV frequency map
 #' 
 #' Creates a map of CNVs using genome binning and plots CNV frequency across the genome. This function optionally returns text, graphical or both outputs.
+#' Additionaly, calculates the proportion of samples with a given percentage of chromosome arm gained/lost 
 #' 
 #' @param cnv (S4) an object of class svcnvio containing data type 'cnv' initialized by validate.cnv
 #' @param fc.pct (numeric) percentage CNV gain/loss for a segment to be considered changed (i.e. 0.2 = 20 percent change 0.8 < segmean && segmean > 1.2)
@@ -33,8 +38,7 @@ setMethod("show","cnvfreq",function(object){
 #' @param g.bin (numeric) size in megabases of the genmome bin to compute break density 
 #' @param sampleids (character) vector containing list of samples to include in plot. if set to NULL, all samples in the input will be used
 #' @param cex.axis,cex.lab,label.line (numeric) plot parameters
-#' @param plot (logical) whether to produce a graphical output
-#' @param summary (logical)  whether to return an object with a the summary
+#' @param plot (logical) whether produce a graphical output
 #' @param verbose (logical) whether to return internal messages
 #' @return an instance of the class 'cnvfreq' and optionally a plot into open device
 #' @keywords CNV, segmentation, plot
@@ -56,7 +60,6 @@ cnv.freq <- function(cnv,
                      cex.lab= 1,
                      label.line= -1.2,
                      plot=TRUE,
-                     summary=TRUE,
                      verbose=TRUE){
   
 stopifnot(cnv@type == "cnv")
@@ -138,7 +141,7 @@ for(chr in rownames(chrlimits)){
   outmat_loss[which(outmat < log2(1-fc.pct), arr.ind=TRUE)] <-  1
   freq.gains <- apply(outmat_gain,1,sum)/nsamples
   freq.loss <- apply(outmat_loss,1,sum)/nsamples
-  
+
 if(plot){
     plot.end<- chrlimits$offset[nrow(chrlimits)]+chrlimits$end[nrow(chrlimits)]
     bin.loc <- chrlimits[chrbins.df[names(freq.gains),on="binid"]$chr,"offset"] + chrbins.df[names(freq.gains),,on="binid"]$start
@@ -160,14 +163,19 @@ if(plot){
     mtext("#samples",side=2,line=1)
     axis(4,c(100,50,0,50,100),at=c(-1,-0.5,0,0.5,1),las=1,pos=plot.end, cex.axis=cex.axis)
     axis(2,c(nsamples,round(nsamples/2),0,round(nsamples/2),nsamples),at=c(-1,-0.5,0,0.5,1),las=1, pos=0, cex.axis=cex.axis)
+    p <- recordPlot()
+}else{
+  p <- recordPlot(load=NULL, attach=NULL)
 }
-  
 
-summary <- data.table(chrbins.df[,c("chr","start","end")],freq.gains,freq.loss)
+
+summary <- data.table(chrbins.df[,c("chr","start","end")],bin.loc,freq.gains,freq.loss)
 
 return(cnvfreq(
             freqsum = summary,
             bin.mat = outmat,
+            chrlimits = chrlimits,
+            plot=p,
             param = list(
                 fc.pct= fc.pct,
                 genome.v= genome.v,
@@ -180,3 +188,5 @@ return(cnvfreq(
             )
        )
 }
+
+

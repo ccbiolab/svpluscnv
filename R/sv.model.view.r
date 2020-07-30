@@ -83,7 +83,7 @@ sv.model.view <- function(cnv, svc, chrom, start, stop,
         
     # obtain SVs for plotting with different colors for each svclass
     svcolormap = setNames(c("blue", "red", "orange", "black", "green","grey20"), 
-                   c("DEL", "DUP", "INV", "TRA", "INS","BND"))
+                   c("DEL", "DUP", "INV", "TRA", "INS", "BND"))
     svcolor <- svcolormap[svtab$svclass]
     svtab_plot <- data.table(svtab,svcolor)
     svtab_plot_seg <- svtab_plot[which(svtab_plot$svclass != "TRA")]
@@ -153,37 +153,11 @@ sv.model.view <- function(cnv, svc, chrom, start, stop,
             }
         }
     
-        for(sid in unique(svtab_plot_seg$sample)){
-            svtab_plot_seg_i <- svtab_plot_seg[which(svtab_plot_seg$sample == sid)]
-            ypos <- sample_order[sid]
-            addrnorm <- rep(c(0,0.2,-0.2,0.1,-0.1,0.3,-0.3),nrow(svtab_plot_seg_i))
-            for(i in 1:nrow(svtab_plot_seg_i)){
-                polygon(rbind(
-                    c(svtab_plot_seg_i[i]$pos1,ypos-0.4-addrnorm[i]),
-                    c(svtab_plot_seg_i[i]$pos1,ypos-0.6-addrnorm[i]),
-                    c(svtab_plot_seg_i[i]$pos2,ypos-0.6-addrnorm[i]),
-                    c(svtab_plot_seg_i[i]$pos2,ypos-0.4-addrnorm[i])
-                    ),col=NA,border=svtab_plot_seg_i[i]$svcolor)
-
-                if(svtab_plot_seg_i[i]$svclass %in% addtext){
-                    if(svtab_plot_seg_i[i]$pos1 < start){
-                        text(start,ypos-0.5-addrnorm[i],
-                             paste("<--",svtab_plot_seg_i[i]$pos1,sep=""),
-                             pos=4,offset=0,cex=cex.text)
-                    }
-                    if(svtab_plot_seg_i[i]$pos2 > stop){
-                        text(stop,ypos-0.5-addrnorm[i],
-                             paste(svtab_plot_seg_i[i]$pos2,"->",sep=""),
-                             pos=2,offset=0,cex=cex.text)
-                    }
-                }
-            }
-        }
     
         for(sid in unique(svtab_plot_tra$sample)){
             svtab_plot_tra_i <- svtab_plot_tra[which(svtab_plot_tra$sample == sid),]
             ypos <- sample_order[sid]
-            addrnorm <- rep(c(0,0.3,-0.3,0.1,-0.1,0.2,-0.2),nrow(svtab_plot_seg_i))
+            addrnorm <- rep(c(0,0.3,-0.3,0.1,-0.1,0.2,-0.2),nrow(svtab_plot_tra_i))
             for(i in 1:nrow(svtab_plot_tra_i)){
                 if(svtab_plot_tra_i[i]$chrom2 == chrom){ 
                     points(svtab_plot_tra_i[i]$pos2,ypos-0.5+addrnorm[i],pch=10)
@@ -205,7 +179,34 @@ sv.model.view <- function(cnv, svc, chrom, start, stop,
                 }
             }
         }
-    
+        
+        for(sid in unique(svtab_plot_seg$sample)){
+            svtab_plot_seg_i <- svtab_plot_seg[which(svtab_plot_seg$sample == sid)]
+            ypos <- sample_order[sid]
+            addrnorm <- rep(c(0,0.2,-0.2,0.1,-0.1,0.3,-0.3),nrow(svtab_plot_seg_i))
+            for(i in 1:nrow(svtab_plot_seg_i)){
+                polygon(rbind(
+                    c(svtab_plot_seg_i[i]$pos1,ypos-0.4-addrnorm[i]),
+                    c(svtab_plot_seg_i[i]$pos1,ypos-0.6-addrnorm[i]),
+                    c(svtab_plot_seg_i[i]$pos2,ypos-0.6-addrnorm[i]),
+                    c(svtab_plot_seg_i[i]$pos2,ypos-0.4-addrnorm[i])
+                ),col=NA,border=svtab_plot_seg_i[i]$svcolor)
+                
+                if(svtab_plot_seg_i[i]$svclass %in% addtext){
+                    if(svtab_plot_seg_i[i]$pos1 < start){
+                        text(start,ypos-0.5-addrnorm[i],
+                             paste("<-",svtab_plot_seg_i[i]$pos1,sep=""),
+                             pos=4,offset=0,cex=cex.text)
+                    }
+                    if(svtab_plot_seg_i[i]$pos2 > stop){
+                        text(stop,ypos-0.5-addrnorm[i],
+                             paste(svtab_plot_seg_i[i]$pos2,"->",sep=""),
+                             pos=2,offset=0,cex=cex.text)
+                    }
+                }
+            }
+        }
+        
         if(is.null(interval)) interval <- round((stop - start)/5000) * 1000
         xlabs <- seq(floor(start/10000)*10000, ceiling(stop/10000)*10000,interval)
         axis(1, at = xlabs,labels=TRUE, lwd.ticks=1.5, pos=0,...)
@@ -213,20 +214,17 @@ sv.model.view <- function(cnv, svc, chrom, start, stop,
         if(is.null(cex.legend)) cex.legend <- 1
         
         if(addlegend %in% c("sv","both")) {
-            fillx <- c("white", "white", "white", "white",NA)
-            borderx <- c("blue", "red","orange","grey20",NA)
-            pchx <- c(NA, NA,NA, NA,10)
-            names(fillx) <-names(borderx) <-names(pchx) <- c("DEL", "DUP", "INV","BND", "TRA")
-            svclassin <- unique(svcdat$svclass)
-            
-            legend(x= start, y =legend_ypos, legend = svclassin, 
+            fillx <- c("white", "white", "white", "white", "white",NA)
+            borderx <- c("blue", "red","orange","green","grey20",NA)
+            pchx <- c(NA,NA,NA,NA,NA,10)
+            names(fillx) <- names(borderx) <- names(pchx) <- c("DEL", "DUP", "INV","INS","BND", "TRA")
+            svclassin <- sort(unique(svtab_plot$svclass))
+            legend(x= start, y =legend_ypos+0.2, legend = svclassin, bg=NA,
                    bty = "n", fill = fillx[svclassin], border=borderx[svclassin], 
-                   pch = pchx[svclassin], horiz = TRUE, x.intersp=0.2, cex=cex.legend)
+                   pch = pchx[svclassin], horiz = TRUE, x.intersp=0.2, cex = cex.legend)
         }
         if(addlegend %in% c("cnv","both")) {
-            legend(x=start + (stop-start)/2, y = legend_ypos,legend = c(paste("CNV= ",cnvlim[1],sep=""), "CNV= 0", paste("CNV= ",cnvlim[2],sep=""), "no-data"),
-                   bty = "n",fill=c("lightblue","white","salmon","grey80"), border=c(NA,"black",NA,NA), 
-                   horiz = TRUE, x.intersp=0.2, cex=cex.legend)
+            colkey(colorRampPalette(c("lightblue","white","salmon"))(256),clim = c(-4,4),side=3,add=TRUE,side.clab=1,length=0.5,shift=0.2,lwd.ticks = 2, dist = -0.12)
         }
     }
     if(summary){

@@ -5,6 +5,7 @@ export(IQSD)
 export(amp.del)
 export(ave.segmean)
 export(break.density)
+export(brk.burden.iqm)
 export(chr.arm.cnv)
 export(chr.sort)
 export(chromosome.limit.coords)
@@ -43,6 +44,7 @@ export(upgr)
 export(validate.cnv)
 export(validate.svc)
 exportClasses(break.annot)
+exportClasses(break.iqm)
 exportClasses(breaks)
 exportClasses(chromo.regs)
 exportClasses(cnvfreq)
@@ -50,6 +52,7 @@ exportClasses(genecnv)
 exportClasses(null.freq)
 exportClasses(refSeqDat)
 exportClasses(svcnvio)
+exportMethods(hbd.mat)
 # import
 import(data.table, except=c("shift"))
 import(GenomicRanges)
@@ -79,6 +82,7 @@ importFrom("stats", "aggregate", "na.omit", "p.adjust", "quantile",
 
 importFrom("utils", "capture.output", "setTxtProgressBar",
            "txtProgressBar")
-
+importFrom("plot3D","colkey")
 importFrom("IRanges","IRanges")
 importFrom("AnnotationDbi","mapIds")
+####

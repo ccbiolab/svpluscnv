@@ -20,15 +20,15 @@ Description: svpluscnv R package is a "swiss army knife"" for the integration an
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 biocViews: StructuralVariation, VariantAnnotation, CopyNumberVariation, Sequencing, GenomicVariation
 Depends: R (>= 3.6)
-Imports: IRanges, GenomicRanges, tidyr, data.table, circlize, D3GB, shape, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg19.knownGene, TxDb.Hsapiens.UCSC.hg38.knownGene, methods, stats, graphics, utils, grDevices, taRifx, S4Vectors, AnnotationDbi,GenomicAlignments,GenomicFeatures,scales
+Imports: IRanges, GenomicRanges, tidyr, data.table, circlize, D3GB, shape, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg19.knownGene, TxDb.Hsapiens.UCSC.hg38.knownGene, methods, stats, graphics, utils, grDevices, taRifx, S4Vectors, AnnotationDbi,GenomicAlignments,GenomicFeatures,scales,plot3D
 Suggests: 
 	BiocStyle,
 	knitr,
 	rmarkdown
 Collate: 
-    validate.input.data.r internal_functions.r break.annot.r breakpoint.density.r shattered.regions.r chr.arm.cnv.r  segment.means.r circular.plot.r cnv.freq.plot.r  clean.cnv.artifact.r  freq.p.test.r gene.cnv.r gene.track.view.r get.genesgr.r hot.spot.samples.R pct.genome.changed.r shattered.map.plot.r shattered.regions.cnv.r  sv.model.view.r svpluscnv.data.r
+    validate.input.data.r internal_functions.r break.annot.r breakpoint.density.r brk.burden.iqm.r shattered.regions.r chr.arm.cnv.r  segment.means.r circular.plot.r cnv.freq.plot.r  clean.cnv.artifact.r  freq.p.test.r gene.cnv.r gene.track.view.r get.genesgr.r hot.spot.samples.R pct.genome.changed.r shattered.map.plot.r shattered.regions.cnv.r  sv.model.view.r svpluscnv.data.r
 VignetteBuilder: knitr
 git_url: https://github.com/ccbiolab/svpluscnv

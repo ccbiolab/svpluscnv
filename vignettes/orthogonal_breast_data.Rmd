@@ -79,7 +79,7 @@ load(url_brca_pcawg,verbose=TRUE)
 To visualize CNV gain/loss frequencies across the genome, we used the cnv.freq function with arguments: fc.pct = 0.3, ploidy = TRUE. The function produces a 1Mb genomic binned table with gain/loss frequencies. The threshold fc.pct represents a percentage of the fold change in copy number dosage (e.g. 0.3 -> 30%). We applied the method to CCLE Breast (59 samples), TCGA brca (1088 samples) and PCAWG-Breast-AdenoCA (198 samples) (Supplementary Figure S1). Although the overall ploidy differs from among datasets, the overall shape is replicated.
 
 
-```{r plot_vignette_1,  fig.width=12, fig.height=10, fig.align='center', fig.cap = "Figure S1. Visualization of CNV frequencies with cnv.freq", message=TRUE}
+```{r plot_vignette_1,  fig.width=12, fig.height=10, fig.align='left', fig.cap = "Figure S1. Visualization of CNV frequencies with cnv.freq", message=TRUE}
 
 par(mfrow=c(3,1),mar=c(3,4,1,4))
 a <- cnv.freq(cnv_brca_ccle,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
@@ -109,7 +109,7 @@ We studied recurrently altered genes among the COSMIC cancer census (Futreal, et
 svcnvplus includes an integrated visualization tool sv.model.view that overlays data from CNV segmentation data and SVC calls. This function allows visualization of all variants affecting a specified genomic region (e.g. gene locus) at once. This functionality is complemented with a genomic track plot function (gene.track.view) that can be used to build layouts. To illustrate this functionality, we selected FHIT as the most frequently altered gene (n=8) in the subset of 35 CCLE breast cell lines with available CNV and SVC data. Observed breakpoints across CNV and SVC datatypes match correctly in all samples harboring SVs (Supplementary Figure S2D); this is remarkable since the data types were completely orthogonal in terms of data source and methodology.
 
 
-```{r plot_vignette_2,  fig.width=12, fig.height=14, fig.align='center', fig.cap = "Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines", message=TRUE}
+```{r plot_vignette_2,  fig.width=12, fig.height=14, fig.align='left', fig.cap = "Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines", message=TRUE}
 
 # load a list of cancer genes (cosmic cancer census release v90)
 url_cosmic_census <- url("https://github.com/ccbiolab/svpluscnv_doc_code/raw/master/data/cosmic_census_v90.rda")
@@ -217,7 +217,7 @@ _(A-C) Recurrently altered genes based on breakpoints derived from CNV and SVC i
 ## Co-localization of breakpoints across orthogonal datasets 
 In order to integrate orthogonal approaches to study structural variants, we implemented tools to evaluate the overall concordance across datasets. To this end, breakpoints are obtained from each dataset using retrieval functions cnv.breaks and svc.breaks for CNV and SVC data respectively. Then, the function match.breaks is used to compare two sets of breakpoints. The function evaluates whether each breakpoint from source ‘a’ has a co-localizing breakpoint in source ‘b’ on a sample by sample basis given a maximum gap distance (maxgap = 10000 (bp)), thus reporting the overall validation rate across datasets. Here we compared the set of 35 CCLE Breast Cell lines with CNV and SVC data available; on average 30.2% SVC breakpoints co-localize with a CNVs and 28.3% CNV breakpoints overlap with an SVC (Supp Fig S3).
  
-```{r plot_vignette_3,  fig.width=12, fig.height=10, fig.align='center', fig.cap = "Supplementary Figure S3. Validation of breakpoints from orthogonal sources", message=TRUE}
+```{r plot_vignette_3,  fig.width=12, fig.height=10, fig.align='left', fig.cap = "Supplementary Figure S3. Validation of breakpoints from orthogonal sources", message=TRUE}
 
 #### Figure SUPPL S3
 
@@ -274,7 +274,7 @@ We tested this approach with the three Breast cancer and cell line datasets used
 
 Finally, svpluscnv has a built-in utility function to extract the sample ids represented in each peak region (hot.spot.samples); at this point the user could further interrogate the functional implications of shattered regions.
 
-```{r plot_vignette_4,  fig.width=12, fig.height=10, fig.align='center', fig.cap = "Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer", message=TRUE}
+```{r plot_vignette_4,  fig.width=12, fig.height=10, fig.align='left', fig.cap = "Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer", message=TRUE}
 
 #set a seed to lock randomization
 set.seed=1234

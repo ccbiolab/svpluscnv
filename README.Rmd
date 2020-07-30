@@ -126,16 +126,15 @@ If the dataset represents samples with hyperploidy, the plot would be skewed. Th
 
 
 
-```{r plot_readme_1,  fig.width=12, fig.height=4, fig.align='center', fig.cap = "Genome wide CNV frequencies", message=FALSE}
-cnv_freq <- cnv.freq(cnv, fc.pct = 0.2, ploidy = FALSE, plot=TRUE)
-cnv_freq
+```{r plot_readme_1,  fig.width=12, fig.height=4, fig.align='left', fig.cap = "Genome wide CNV frequencies", message=FALSE}
+cnv_freq <- cnv.freq(cnv, fc.pct = 0.2, ploidy = FALSE)
 ```
 
 ### Chromosome arm CNV determination
 
 The function `chr.arm.cnv` obtains the segment weighted average log-ratios for each chromosome arm in each sample; it returns a matrix formated output.
 
-```{r plot_readme_2, fig.width=12, fig.height=7, fig.align='center', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+```{r plot_readme_2, fig.width=12, fig.height=7, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 charm.mat <- chr.arm.cnv(cnv, genome.v = "hg19", verbose = FALSE)
 # heatmap plot of chromosome arm level CNV
 require(gplots,quietly = TRUE,warn.conflicts = FALSE)
@@ -159,9 +158,9 @@ head(pct_change)
 
 ### Breakpoint burden analysis
 
-In addition to percentage of genome changed, we can measure the total burden of breakpoints derived from CNV segmention and SV calls. Both the percent genome change and breakpoint burden measures are expected to show positive correlation as shown below.
+Chromosomal instability measured as percentage of genome changed is highly dependent on ploidy. An alternative approach consists on measuring the total burden of breakpoints derived from CNV segmention and/or SV calls. Both the percent genome change and breakpoint burden measures are expected to show positive correlation as shown below.
 
-```{r plot_readme_3, fig.width=9, fig.height=5, fig.align='center', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+```{r plot_readme_3, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
 # define breakpoints from svc data
 svc_breaks  <- svc.breaks(svc)  
 # define breakpoints from cnv data based on certain CNV log-ratio change cutoff
@@ -180,6 +179,31 @@ plot(dat2, xlab="percentage genome changed", ylab="log2(1+CNV break count)")
 legend("bottomright",paste("Spearman's cor=",sprintf("%.2f",cor(dat2,method="spearman")[1,2]), sep=""))
 ```
 
+Mutational processes underlying structural variation may invove different mechanisms and presentations. Specificaly some tumors present accumulation of breakpoints in local regions due to catastrophic events (e.g. chromothripsis, chromoplexia) while others show near-random distribution across the genome. Here we introduce a breakpoint burden measure robust against local phenomena and outliers. The function `brk.burden.iqm` ontains measures of breakpoint density for eacg chromosome arm, then the inter quantile mean (`svpluscnv::IQM`) across all chromosome arms is computed and reported.
+
+```{r plot_readme_3b, fig.width=12, fig.height=4, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+# SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
+svc.brk.iqm <- brk.burden.iqm(svc_breaks)
+```
+
+```{r plot_readme_3c, fig.width=12, fig.height=4, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+# SVC corrected breakpoint burden
+par(mar=c(1,5,1,1))
+cnv.brk.iqm <- brk.burden.iqm(cnv_breaks)
+```
+
+```{r plot_readme_3d, fig.width=9, fig.height=5, fig.align='left', fig.cap = "SV versus CNV breakpoint burden",  message=FALSE}
+# Comparison of corrected versus uncorrected breakpoint burden
+par(mfrow=c(1,2))
+plot(svc.brk.iqm@summary$brk.iqm,svc.brk.iqm@summary$`overal density`, las=1,
+     xlab="IQM corrected SVC break burden",ylab="Overal SVC break burden")
+plot(cnv.brk.iqm@summary$brk.iqm,cnv.brk.iqm@summary$`overal density`,las=1,
+     xlab="IQM corrected CNV break burden",ylab="Overal CNV break burden")
+```
+
+
+
 ```{r echo=FALSE}
 par(def.par)
 ```
@@ -188,7 +212,7 @@ par(def.par)
 
 Both CNV segmentation profiles and SV calls produce orthogonal results for variants that involve CN dosage changes. The function `match.breaks` compares the breakpoints derived from both approaches by identifying their co-localizing. It takes two objects of class `breaks` returned by either `svc.breaks` or `cnv.breaks` function. Thus, it may be used to compare also two sets of CNV breakpoints obtained from different algorithms or SV callers.
 
-```{r plot_readme_4,  fig.width=12, fig.height=10, fig.align='center', fig.cap = "Common breakpoints by sample",  message=FALSE}
+```{r plot_readme_4,  fig.width=12, fig.height=10, fig.align='left', fig.cap = "Common breakpoints by sample",  message=FALSE}
 common.breaks <- match.breaks(cnv_breaks, svc_breaks, 
                               maxgap=100000, 
                               verbose=FALSE,
@@ -247,7 +271,7 @@ shatt_lung_cnv
 
 Circos plotting is available via [circlize](https://cran.r-project.org/web/packages/circlize/index.html) package wrapper function  `circ.chromo.plot`, which takes an object generated by `shattered.regions` function. The circular plot represents (inward to outward): Structural variants, CNVs, shattered regions (purple) and the ideogram. 
 
-```{r plot_readme_5, fig.width=9, fig.height=5, fig.align='center', fig.cap = "Circos plot representing c LUNG cancer cell lines with chromothripsis",  message=FALSE}
+```{r plot_readme_5, fig.width=9, fig.height=5, fig.align='left', fig.cap = "Circos plot representing c LUNG cancer cell lines with chromothripsis",  message=FALSE}
 # plotting functions are available for whole genome and chromosomes with shattered regions (both combined CNV and SV and CNV only) 
 par(mfrow=c(1,3))
 circ.wg.plot(cnv,svc,sample.id = "SCLC21H_LUNG")
@@ -257,7 +281,6 @@ circ.chromo.plot(shatt_lung,sample.id = "SCLC21H_LUNG")
 
 
 ```{r echo=FALSE}
-graphics.off()
 par(def.par)
 ```
 
@@ -266,16 +289,24 @@ par(def.par)
 
 To establish whether certain regions suffer chromosome shattering above expectation, we evaluate the null hypothesis that shattered regions occur throughout the genome at random; To this end we first create an empirical null distribution based on the sample set under study. The null is then compared with the observed distribution (`shatt_lung_cnv$high.density.regions.hc`) to obtain empirical adjusted p-values. The bins with corrected p-values deemed statistically significant define regions under selection pressure for chromosome shattering. Since the genomic bins might span low coverage regions where no CNV or SVs are mapped we removed remove bins with frequency = 0 setting the `zerofreq=TRUE`.
 
-```{r plot_readme_6, fig.width=9, fig.height=5, fig.align='center', fig.cap = "Circos plot representing c LUNG cancer cell lines with chromothripsis",  message=FALSE}
-set.seed<-1234
+```{r plot_readme_6, fig.width=9, fig.height=5, fig.align='left', fig.cap = "Circos plot representing c LUNG cancer cell lines with chromothripsis",  message=FALSE}
+set.seed(12345678)
 null.test <- freq.p.test(shatt_lung@high.density.regions.hc, 
                          method="fdr", p.cut = 0.05)
 ```
 
+```{r echo=FALSE}
+par(def.par)
+```
+
 \We can visualize the aggregate map of shattered regions for all samples with `shattered.map.plot`. The peaks that rise above `null.test$freq.cut` define recurrently shattered regions
 
-```{r plot_readme_7,  fig.width=12, fig.height=4, fig.align='center', fig.cap = "Recurrently shattered regions map", message=FALSE}
+```{r plot_readme_7,  fig.width=12, fig.height=4, fig.align='left', fig.cap = "Recurrently shattered regions map", message=FALSE}
 shattered.map.plot(shatt_lung, freq.cut = null.test@freq.cut)
+```
+
+```{r echo=FALSE}
+par(def.par)
 ```
 
 And finally collect groups of samples with recurrent shattered regions as defined by the empirical test described above. 
@@ -306,7 +337,7 @@ amp_del_genes <- amp.del(genecnv_data, logr.cut = 2)
 
 The output of the function `amp.del` contains a ranking of genes based on the number of amplification and deletion events as well as lists containing the sample ids that can be used to build oncoprints or other visualizations. We can simply visualize the top of the ranking as below:
 
-```{r plot_readme_8,  fig.width=9, fig.height=5, fig.align='center', fig.cap = "Recurrently altered genes with overlapping CNV breakpoints", message=FALSE}
+```{r plot_readme_8,  fig.width=9, fig.height=5, fig.align='left', fig.cap = "Recurrently altered genes with overlapping CNV breakpoints", message=FALSE}
 par(mfrow=c(1,2),mar=c(4,7,1,1))
 barplot(amp_del_genes$amplified.rank[1:20],col="red",
         las=1,main="Amplified genes",horiz=TRUE,xlab="#samples")
@@ -315,7 +346,6 @@ barplot(amp_del_genes$deepdel.rank[1:20],col="blue",
 ```
 
 ```{r echo=FALSE}
-graphics.off()
 par(def.par)
 ```
 
@@ -326,6 +356,7 @@ Instead of focusing on high-level dosage changes, we evaluate whether CNV breakp
 ```{r message=FALSE}
 results_cnv <- cnv.break.annot(cnv, fc.pct = 0.2, genome.v="hg19",clean.brk = 8,upstr = 100000,verbose=FALSE)
 ```
+
 SV calls do not incorporate dosage information, therefore we study the localization of breakpoints with respect to known genes. The annotation identifies small segmental variants overlapping with genes. For translocations (TRA) and large segmental variants (default > 200Kb) only the breakpoint overlap with genes are considered. `svc.break.annot` returns a list of genes and associated variants that can be retrieved for further analyses. In addition, every gene is associated via list to the sample ids harboring variants.
 
 ```{r message=FALSE}
@@ -333,7 +364,7 @@ results_svc <- svc.break.annot(svc, svc.seg.size = 200000, genome.v="hg19",upstr
 ```
 
 We can then integrate results obtained from scanning SV and CNV breks using the 'merge2lists' function 
-```{r plot_readme_9,  fig.width=9, fig.height=5, fig.align='center', fig.cap = "Recurrently altered genes with overlapping CNV breakpoints", message=FALSE}
+```{r plot_readme_9,  fig.width=9, fig.height=5, fig.align='left', fig.cap = "Recurrently altered genes with overlapping CNV breakpoints", message=FALSE}
 # intersect elements from two lists
 disruptSamples <- merge2lists(results_cnv@disruptSamples,results_svc@disruptSamples, fun="intersect")
 upstreamSamples <- merge2lists(results_cnv@upstreamSamples,results_svc@upstreamSamples, fun="intersect")
@@ -351,7 +382,7 @@ par(def.par)
 
 Integrating segmentation and SV calls is critical to understand the role of structural variants in recurrently altered genes. `svpluscnv` includes an integrated visualization tool `sv.model.view` that overlays data from CNV segmentation data and SV calls. This function allows to glance all variants affecting a specified genomic region (e.g. gene locus). This functionality is complemented with a genomic track plot function (`gene.track.view`) that can be used to build layouts; The `gene.track.view` function can also be used to retrieve information about isoforms and exonic regions of each gene.
 
-```{r plot_readme_10,  fig.width=9, fig.height=12, fig.align='center', fig.cap = "Visualizaion of structural variants in PTPRD", message=FALSE}
+```{r plot_readme_10,  fig.width=9, fig.height=12, fig.align='left', fig.cap = "Visualizaion of structural variants in PTPRD", message=FALSE}
 # we use method gene.symbol.info to obtain the genomic coordinates of our gene of interests PTPRD (one of the top altered genes shown above)
 refSeqGene <- gene.symbol.info(refseq_hg19,"PTPRD")
 chrom <- refSeqGene$chrom

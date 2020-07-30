@@ -15,7 +15,6 @@ cnv.freq(
   cex.lab = 1,
   label.line = -1.2,
   plot = TRUE,
-  summary = TRUE,
   verbose = TRUE
 )
 }
@@ -34,9 +33,7 @@ cnv.freq(
 
 \item{cex.axis, cex.lab, label.line}{(numeric) plot parameters}
 
-\item{plot}{(logical) whether to produce a graphical output}
-
-\item{summary}{(logical)  whether to return an object with a the summary}
+\item{plot}{(logical) whether produce a graphical output}
 
 \item{verbose}{(logical) whether to return internal messages}
 }

@@ -266,7 +266,7 @@ if(is.null(chr.lim)){
       fragment[[paste(chr,start,stop)]][names(res_bp)] <- res_bp
     }
   }
-  if(verbose) cat("Done!\n")
+  if(verbose) cat("\nDone!\n")
 
   return( do.call(cbind,fragment))
   

@@ -1,5 +1,3 @@
-
-
 # Comparative analysis of orthogonal Breast Cancer datasets
 ### svpluscnv: analysis and visualization of complex structural variation data
 #### Gonzalo Lopez, Laura E. Egolf, Federico M. Giorgi, Sharon J. Diskin, and Adam A. Margolin
@@ -86,7 +84,7 @@ c <- cnv.freq(cnv_brca_pcawg,fc.pct = 0.3, ploidy = TRUE,verbose=FALSE)
 title("C", adj = 0, line = 0, cex=2)
 ```
 
-<img src="figure/plot_vignette_1-1.png" title="Figure S1. Visualization of CNV frequencies with cnv.freq" alt="Figure S1. Visualization of CNV frequencies with cnv.freq" style="display: block; margin: auto;" />
+<img src="figure/plot_vignette_1-1.png" title="Figure S1. Visualization of CNV frequencies with cnv.freq" alt="Figure S1. Visualization of CNV frequencies with cnv.freq" style="display: block; margin: auto auto auto 0;" />
 
 
 
@@ -145,7 +143,7 @@ svc_annot_ccle <- svc.break.annot(svc_brca_ccle,
 # combine CNV and SVC and filter by cosmic genes
 disruptSamplesCCLE <- merge2lists(cnv_annot_ccle@disruptSamples,svc_annot_ccle@disruptSamples, fun="intersect")
 disruptSamplesCCLE_cosmic <- disruptSamplesCCLE[intersect(names(disruptSamplesCCLE),cosmic_cancer_census_v90$Gene.Symbol)]
-ccle_plot_genes <- rev(sort(unlist(lapply(disruptSamplesCCLE_cosmic,length)),decreasing=T)[1:20])
+ccle_plot_genes <- rev(sort(unlist(lapply(disruptSamplesCCLE_cosmic,length)),decreasing=TRUE)[1:20])
 
 # Identification of breakpoints overlapping known genes; for TCGA dataset we only use CNV 
 
@@ -164,7 +162,7 @@ cnv_annot_tcga <- cnv.break.annot(cnv_brca_tcga,
 # filter by cosmic genes
 disruptSamplesTCGA <- cnv_annot_tcga@disruptSamples
 disruptSamplesTCGA_cosmic <- disruptSamplesTCGA[intersect(names(disruptSamplesTCGA),cosmic_cancer_census_v90$Gene.Symbol)]
-tcga_plot_genes <- rev(sort(unlist(lapply(disruptSamplesTCGA_cosmic,length)),decreasing=T)[1:20])
+tcga_plot_genes <- rev(sort(unlist(lapply(disruptSamplesTCGA_cosmic,length)),decreasing=TRUE)[1:20])
 
 
 ## Identification of breakpoints overlapping known genes; for PCAWG we use bothe CNV and SV and intersect the results 
@@ -194,7 +192,7 @@ svc_annot_pcawg <- svc.break.annot(svc_brca_pcawg,
 # combine CNV and SVC and filter by cosmic genes
 disruptSamplesPCAWG <- merge2lists(cnv_annot_pcawg@disruptSamples, svc_annot_pcawg@disruptSamples, fun="intersect")
 disruptSamplesPCAWG_cosmic <- disruptSamplesPCAWG[intersect(names(disruptSamplesPCAWG),cosmic_cancer_census_v90$Gene.Symbol)]
-pcawg_plot_genes <- rev(sort(unlist(lapply(disruptSamplesPCAWG_cosmic,length)),decreasing=T)[1:20])
+pcawg_plot_genes <- rev(sort(unlist(lapply(disruptSamplesPCAWG_cosmic,length)),decreasing=TRUE)[1:20])
 
 
 ## obtain gene coordinates for ploting 
@@ -222,15 +220,15 @@ layout(matrix(c(1,2,3,4,4,4,5,5,5),3,3,
               byrow = TRUE),heights = c(5.5,4.5,3.5))
 par(mar=c(4,5,1,1))
 barplot(ccle_plot_genes,
-        horiz=T,las=1,cex.names = 1, xlab="#CCLE samples",
+        horiz=TRUE,las=1,cex.names = 1, xlab="#CCLE samples",
         col=ccle_color,border="NA")
 title("A", adj = 0, line = 0, cex=2)
 barplot(tcga_plot_genes,
-        horiz=T,las=1,cex.names = 1, xlab="#TCGA samples",
+        horiz=TRUE,las=1,cex.names = 1, xlab="#TCGA samples",
         col=tcga_color,border="NA")
 title("B", adj = 0, line = 0, cex=2)
 barplot(pcawg_plot_genes,
-        horiz=T,las=1,cex.names = 1, xlab="#PCAWG samples",
+        horiz=TRUE,las=1,cex.names = 1, xlab="#PCAWG samples",
         col=pcawg_color,border="NA")
 title("C", adj = 0, line = 0, cex=2)
 
@@ -244,7 +242,7 @@ gene.track.view(chr=chr ,start=start, stop=stop, addtext=TRUE, cex.text=1,
                 summary = FALSE,cex=2)
 ```
 
-<img src="figure/plot_vignette_2-1.png" title="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" alt="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" style="display: block; margin: auto;" />
+<img src="figure/plot_vignette_2-1.png" title="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" alt="Supplementary Figure S2. Recurrent SVs in Breast Cancer tumors and cell lines" style="display: block; margin: auto auto auto 0;" />
 
 
  
@@ -269,7 +267,7 @@ title("A", adj = 0, line = 0, cex=2)
 title("B", adj = 0, line = -25, cex=2)
 ```
 
-<img src="figure/plot_vignette_3-1.png" title="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" alt="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" style="display: block; margin: auto;" />
+<img src="figure/plot_vignette_3-1.png" title="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" alt="Supplementary Figure S3. Validation of breakpoints from orthogonal sources" style="display: block; margin: auto auto auto 0;" />
 
 
 
@@ -316,7 +314,7 @@ Finally, svpluscnv has a built-in utility function to extract the sample ids rep
 
 ```r
 #set a seed to lock randomization
-set.seed=1234
+set.seed(1234)
 
 # evaluate hotspots and plot shattered region maps for each dataset
 
@@ -347,7 +345,7 @@ text(4e8,fpt_pcawg@freq.cut+1,"fdr < 0.05",cex=1.1)
 title("F", adj = 0, line = 1, cex=2)
 ```
 
-<img src="figure/plot_vignette_4-1.png" title="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" alt="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" style="display: block; margin: auto;" />
+<img src="figure/plot_vignette_4-1.png" title="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" alt="Supplementary Figure S4. Identification of shattered region hot-spots in breast cancer" style="display: block; margin: auto auto auto 0;" />
 
 
  
