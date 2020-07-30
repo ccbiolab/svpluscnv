@@ -29,6 +29,7 @@ setMethod("show","cnvfreq",function(object){
 #' CNV frequency map
 #' 
 #' Creates a map of CNVs using genome binning and plots CNV frequency across the genome. This function optionally returns text, graphical or both outputs.
+#' Additionaly, calculates the proportion of samples with a given percentage of chromosome arm gained/lost 
 #' 
 #' @param cnv (S4) an object of class svcnvio containing data type 'cnv' initialized by validate.cnv
 #' @param fc.pct (numeric) percentage CNV gain/loss for a segment to be considered changed (i.e. 0.2 = 20 percent change 0.8 < segmean && segmean > 1.2)
@@ -187,4 +188,5 @@ return(cnvfreq(
             )
        )
 }
+
 

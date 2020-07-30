@@ -30,6 +30,8 @@ brk.burden.iqm(
 
 \item{chr.lim}{(data.frame) 3 column table (chrom, begin, end) indicating the chromosome most distal coordinates with coverage. Also returned by the function svpluscnv::chromosome.limit.coords.}
 
+\item{plot}{(logical) whether produce a graphical output}
+
 \item{verbose}{(logical) whether to return internal messages}
 }
 \value{

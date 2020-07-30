@@ -4,7 +4,9 @@
 \name{nbl_svdat}
 \alias{nbl_svdat}
 \title{TARGET Neuroblastoma SVC}
-\format{An object of class \code{data.frame} with 7366 rows and 8 columns.}
+\format{
+An object of class \code{data.frame} with 7366 rows and 8 columns.
+}
 \usage{
 nbl_svdat
 }

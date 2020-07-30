@@ -39,7 +39,7 @@ setMethod("show","svcnvio",function(object){
 validate.svc <- function(sv.df){
     
     stopifnot(ncol(sv.df) >= 8)
-    uid <-  paste("svc_",createRandomString(nrow(sv.df),8),sep="")
+    uid <-  paste("svc_",createRandomString(nrow(sv.df),10),sep="")
     svc <- data.table(remove.factors(sv.df[,1:8]),uid)
     
     colnames(svc) <- c("sample","chrom1","pos1","strand1","chrom2","pos2","strand2","svclass","uid")
@@ -119,7 +119,7 @@ chr.sort <- function(chrlist){
 validate.cnv <- function(cnv.df){
     
     stopifnot(ncol(cnv.df) >= 6)
-    uid <-  paste("cnv_",createRandomString(nrow(cnv.df),8),sep="")
+    uid <-  paste("cnv_",createRandomString(nrow(cnv.df),10),sep="")
     cnvdat <- data.table(cnv.df[,1:6],uid)
     
     colnames(cnvdat) <- c("sample","chrom","start","end","probes","segmean","uid")

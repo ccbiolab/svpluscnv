@@ -20,7 +20,7 @@ Description: svpluscnv R package is a "swiss army knife"" for the integration an
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 biocViews: StructuralVariation, VariantAnnotation, CopyNumberVariation, Sequencing, GenomicVariation
 Depends: R (>= 3.6)
 Imports: IRanges, GenomicRanges, tidyr, data.table, circlize, D3GB, shape, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg19.knownGene, TxDb.Hsapiens.UCSC.hg38.knownGene, methods, stats, graphics, utils, grDevices, taRifx, S4Vectors, AnnotationDbi,GenomicAlignments,GenomicFeatures,scales,plot3D

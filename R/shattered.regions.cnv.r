@@ -70,7 +70,7 @@ shattered.regions.cnv <- function(cnv,
   b <- sapply(rownames(cnv.brk.dens),function(i) names(which(cnv.brk.dens[i,] >= num.breaks)),simplify=FALSE)
   
   # condition for chromothripsis: at least n=breaks > 6 (svc SND cnv)  AND n-breaks > u+2*sd (svc AND cnv) 
-  res <- sapply(rownames(cnv.brk.dens),function(i) Reduce(intersect, list(b[[i]],a[[i]])) )
+  res <- sapply(rownames(cnv.brk.dens),function(i) Reduce(intersect, list(b[[i]],a[[i]])) ,simplify=FALSE)
   
   highDensityRegions <- cnv.brk.dens
   highDensityRegions[] <- 0

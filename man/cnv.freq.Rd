@@ -14,6 +14,7 @@ cnv.freq(
   cex.axis = 1,
   cex.lab = 1,
   label.line = -1.2,
+  plot = TRUE,
   verbose = TRUE
 )
 }
@@ -31,6 +32,8 @@ cnv.freq(
 \item{sampleids}{(character) vector containing list of samples to include in plot. if set to NULL, all samples in the input will be used}
 
 \item{cex.axis, cex.lab, label.line}{(numeric) plot parameters}
+
+\item{plot}{(logical) whether produce a graphical output}
 
 \item{verbose}{(logical) whether to return internal messages}
 }

@@ -4,7 +4,9 @@
 \name{cnv_blacklist_regions}
 \alias{cnv_blacklist_regions}
 \title{Low coverage regions}
-\format{An object of class \code{data.frame} with 60 rows and 3 columns.}
+\format{
+An object of class \code{data.frame} with 60 rows and 3 columns.
+}
 \usage{
 cnv_blacklist_regions
 }

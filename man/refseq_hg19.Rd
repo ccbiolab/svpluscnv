@@ -4,7 +4,9 @@
 \name{refseq_hg19}
 \alias{refseq_hg19}
 \title{Reference transcript and exon annotations for hg19}
-\format{An object of class \code{refSeqDat} of length 1.}
+\format{
+An object of class \code{refSeqDat} of length 1.
+}
 \usage{
 refseq_hg19
 }

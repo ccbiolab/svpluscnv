@@ -4,7 +4,9 @@
 \name{nbl_segdat}
 \alias{nbl_segdat}
 \title{TARGET Neuroblastoma CNV}
-\format{An object of class \code{data.frame} with 17680 rows and 6 columns.}
+\format{
+An object of class \code{data.frame} with 17680 rows and 6 columns.
+}
 \usage{
 nbl_segdat
 }

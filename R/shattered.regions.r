@@ -350,7 +350,7 @@ shattered.regions <- function(cnv,
   
   
   # condition for chromothripsis: at least n=breaks > 6 (svc SND cnv)  AND n-breaks > u+2*sd (svc AND cnv) 
-  res <- sapply(commonSamples,function(i) Reduce(intersect, list(a[[i]],b[[i]],c[[i]],d[[i]],e[[i]],f[[i]])))
+  res <- sapply(commonSamples,function(i) Reduce(intersect, list(a[[i]],b[[i]],c[[i]],d[[i]],e[[i]],f[[i]])), simplify=FALSE)
   
   highDensityRegions <- rbind(cnvbrk.dens[commonSamples,])
   if(length(commonSamples == 1)) rownames(highDensityRegions) <- commonSamples

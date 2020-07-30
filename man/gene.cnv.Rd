@@ -16,9 +16,9 @@ gene.cnv(
 \arguments{
 \item{cnv}{(S4) an object of class svcnvio containing data type 'cnv' initialized by validate.cnv}
 
-\item{genome.v}{(hg19 or hg38) reference genome version to draw chromosome limits and centromeres}
+\item{genome.v}{(hg19 or hg38) reference genome version to fetch gene annotations when 'genesgr=NULL'}
 
-\item{genesgr}{(S4) a GenomicRanges object containing gene annotations (if not NULL overides genome.v). It must containg 'strand' and a metadata field 'gene_id' with unique values. Seqnames are expected in the format (chr1, chr2, ...)}
+\item{genesgr}{(S4) a GenomicRanges object containing genomic feature annotations (if not NULL overides genome.v). It must containg 'strand' and a metadata field 'gene_id' with unique values. Seqnames are expected in the format (chr1, chr2, ...)}
 
 \item{chrlist}{(character) list of chromosomes to include chr1, chr2, etc...}
 
