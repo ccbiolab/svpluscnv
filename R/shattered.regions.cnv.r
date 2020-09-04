@@ -13,6 +13,7 @@
 #' @param num.breaks (numeric) size in megabases of the genmome bin to compute break density 
 #' @param num.sd (numeric) size in megabases of the sliding genmome window
 #' @param dist.iqm.cut (numeric) interquantile average of the distance between breakpoints within a shattered region
+#' @param chrlist (character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included
 #' @param verbose (logical)
 #' @return an instance of the class 'chromo.regs' containing breakpoint mapping onto genes
 #' @keywords CNV, segmentation
@@ -35,19 +36,26 @@ shattered.regions.cnv <- function(cnv,
                               num.breaks = 10,
                               num.sd = 5,
                               dist.iqm.cut = 1e+05,
+                              chrlist=NULL,
+                              chr.lim=NULL,
                               verbose=TRUE
                               ){
   
   stopifnot(cnv@type == "cnv")
   cnvdat <- cnv@data
 
-  chr.lim <- chromosome.limit.coords(cnv)
+  if(is.null(chr.lim)){
+    chr.lim <- chromosome.limit.coords(cnv)
+  }else{
+    stopifnot(ncol(chr.lim) == 3)   
+  }
   
   cnvbrk <- cnv.breaks(cnv = cnv, 
                        fc.pct = fc.pct, 
                        min.cnv.size = min.cnv.size, 
                        low.cov = low.cov, 
                        clean.brk=clean.brk,
+                       chrlist = chrlist,
                        verbose = verbose)
   
   if(verbose) message("Mapping CNV breakpoints across the genome:")

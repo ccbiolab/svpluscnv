@@ -22,7 +22,8 @@ shattered.regions(
   num.common.sd = 3,
   maxgap = 10000,
   chrlist = NULL,
-  interleaved.cut = 0.5,
+  chr.lim = NULL,
+  interleaved.cut = 0.33,
   dist.iqm.cut = 1e+05,
   verbose = TRUE
 )
@@ -61,6 +62,8 @@ shattered.regions(
 \item{maxgap}{(numeric) inherited from match.breaks(); sets the maximum gap between co-localizing orthogonal breakpoints}
 
 \item{chrlist}{(character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included}
+
+\item{chr.lim}{(data.frame) 3 column table (chrom, begin, end) indicating the chromosome most distal coordinates with coverage. Also returned by the function svpluscnv::chromosome.limit.coords.}
 
 \item{interleaved.cut}{(numeric) 0-1 value indicating percentage of interleaved (non-contiguous) SV breakpoint pairs}
 

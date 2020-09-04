@@ -4,10 +4,12 @@
 \alias{svc.breaks}
 \title{Identify SVC breakpoints}
 \usage{
-svc.breaks(svc, low.cov = NULL)
+svc.breaks(svc, chrlist = NULL, low.cov = NULL)
 }
 \arguments{
 \item{svc}{(S4) an object of class svcnvio containing data type 'svc' initialized by validate.svc}
+
+\item{chrlist}{(character) list of chromosomes to include chr1, chr2, etc...}
 
 \item{low.cov}{(data.table) a data.table (chrom, start, end) indicating low coverage regions to exclude from the analysis}
 }

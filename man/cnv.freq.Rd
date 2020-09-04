@@ -42,6 +42,7 @@ an instance of the class 'cnvfreq' and optionally a plot into open device
 }
 \description{
 Creates a map of CNVs using genome binning and plots CNV frequency across the genome. This function optionally returns text, graphical or both outputs.
+Additionaly, calculates the proportion of samples with a given percentage of chromosome arm gained/lost
 }
 \examples{
 

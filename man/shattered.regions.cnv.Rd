@@ -16,6 +16,8 @@ shattered.regions.cnv(
   num.breaks = 10,
   num.sd = 5,
   dist.iqm.cut = 1e+05,
+  chrlist = NULL,
+  chr.lim = NULL,
   verbose = TRUE
 )
 }
@@ -41,6 +43,8 @@ shattered.regions.cnv(
 \item{num.sd}{(numeric) size in megabases of the sliding genmome window}
 
 \item{dist.iqm.cut}{(numeric) interquantile average of the distance between breakpoints within a shattered region}
+
+\item{chrlist}{(character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included}
 
 \item{verbose}{(logical)}
 }

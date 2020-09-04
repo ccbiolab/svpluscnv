@@ -130,6 +130,7 @@ return(breaks(breaks=breakpoints,
 #' Transform structural varian (SVC) data.frame into a 'breaks' object 
 #' 
 #' @param svc (S4) an object of class svcnvio containing data type 'svc' initialized by validate.svc
+#' @param chrlist (character) list of chromosomes to include chr1, chr2, etc...
 #' @param low.cov (data.table) a data.table (chrom, start, end) indicating low coverage regions to exclude from the analysis
 #' @return an instance of the class 'breaks' containing breakpoint and breakpoint burden information
 #' @keywords Structural variants
@@ -143,11 +144,18 @@ return(breaks(breaks=breakpoints,
 
 
 
-svc.breaks <- function(svc, low.cov=NULL){
+svc.breaks <- function(svc, chrlist=NULL,low.cov=NULL){
     
 stopifnot(svc@type == "svc")
-svcdat <- svc@data
-    
+
+if(!is.null(chrlist) ){
+  svcdat <- svc@data[intersect(which(svc@data$chrom1 %in% chrlist),which(svc@data$chrom2 %in% chrlist))]
+}else{
+  svcdat <- svc@data
+}
+  stopifnot(nrow(svcdat) > 0)
+  
+
 brk.burden <- rep(0,length(unique(svcdat$sample)))
 names(brk.burden) <- unique(svcdat$sample)
 

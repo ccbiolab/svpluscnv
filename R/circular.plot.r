@@ -4,9 +4,11 @@
 #' 
 #' @param chromo.regs.obj (chromo.regs) An object of class chromo.regs 
 #' @param sample.id (character) the id of a sample to be plotted within 
+#' @param print.name (logical) whether to print the sample id  in the center of the circular plot
 #' @param genome.v (character) (hg19 or h38) reference genome version to draw chromosome limits and centromeres
 #' @param lrr.pct (numeric) copy number change between 2 consecutive segments: i.e (default) cutoff = 0.2 represents 20 percent fold change
 #' @param lrr.max (numeric) CNV plot limit
+#' @param high.conf (logical) Whether to plot only high confidence shattered regions (see https://github.com/ccbiolab/svpluscnv#identification-of-shattered-regions for more information)
 #' @param chrlist (character) vector containing chromosomes to plot; by default only chromosomes with shattered regions are ploted
 #' @param ... Additional graphical parameters
 #' @return circos plot into open device
@@ -28,9 +30,11 @@
 
 circ.chromo.plot <- function(chromo.regs.obj, 
                              sample.id,
+                             print.name=TRUE,
                              genome.v = "hg19",
                              lrr.pct = 0.2,
                              lrr.max = 4,
+                             high.conf=FALSE,
                              chrlist=NULL,
                              ...){
 
@@ -44,6 +48,9 @@ if(sample.id %in% chromo.regs.obj@svc@data$sample){
     svcdat <- data.table()
 }
 regions <- chromo.regs.obj@regions.summary[[sample.id]]
+if(high.conf == TRUE) regions <-  regions[which(regions$conf == "HC")] 
+
+stopifnot(nrow(regions) > 0)
 
 stopifnot(nrow(chromo.regs.obj@cnv@data) > 0 | nrow(chromo.regs.obj@svc@data) >  0)
 
@@ -100,7 +107,7 @@ circos.genomicTrackPlotRegion(cnvlist, bg.lwd =0.2, bg.col=rainbow(length(cnvlis
                                 circos.genomicLines(region, value, col=as.character(cnvlist[[CELL_META$sector.index]][,"colores"]), numeric.column = c(1), type="segment")
                               })
 if(nrow(svcdat) >  0) circos.genomicLink(links1, links2, col = linkcolors, border = NA)
-text(0, 0,  gsub("_","\n",sample.id),...)
+if(print.name == TRUE) text(0, 0,  gsub("_","\n",sample.id),...)
 
 }
 

@@ -42,7 +42,7 @@ setMethod("show","chromo.regs",function(object){
     
     writeLines(paste("An object of class chromo.regs from svpluscnv containing the following stats:",
                 "\nNumber of samples tested=",nrow(object@high.density.regions),
-                "\nNumber of samples with shattered regions=",length(object@regions.summary),
+                "\nNumber of samples with high-breakpoint density bins=",length(which(apply(object@high.density.regions,1,sum) != 0)),
                 "\nNumber of samples with high-confidence shattered regions=",conf["HC"],
                "\nNumber of samples with low-confidence shattered regions=",conf["lc"]))
 })
@@ -67,6 +67,28 @@ setMethod("hbd.mat", "chromo.regs", function(object, conf="hc"){
     }else{
       object@high.density.regions
     }
+})
+
+#' Return the genomicRanges object  containing the genomic bins 
+#' @param object (chromo.regs) An object of class chromo.regs 
+#' @return an genomicRanges object with defined genomic bins
+#' @export
+#' @docType methods
+#' @rdname extract.bins-methods
+
+setGeneric("extract.bins", function(object) standardGeneric("extract.bins"))
+
+#' @rdname extract.bins-methods
+#' @export
+
+setMethod("extract.bins", "chromo.regs", function(object){
+  binNames <- colnames(object@high.density.regions)
+  bindf <- remove.factors(data.frame(do.call(rbind,strsplit(binNames," "))))
+  bindf[,2] <- as.numeric(bindf[,2])
+  bindf[,3] <- as.numeric(bindf[,3])
+  colnames(bindf) <- c("chrom","start","end")
+  bingr <- with(bindf,GRanges(chrom, IRanges(start=start, end=end), name=binNames))
+  return(bingr)
 })
 
 
@@ -236,6 +258,7 @@ shattered.eval <- function(chromo.regs.obj,
 #' @param num.common.sd (numeric) number of standard deviations above the sample average for num.common.breaks
 #' @param maxgap (numeric) inherited from match.breaks(); sets the maximum gap between co-localizing orthogonal breakpoints
 #' @param chrlist (character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included
+#' @param chr.lim (data.frame) 3 column table (chrom, begin, end) indicating the chromosome most distal coordinates with coverage. Also returned by the function svpluscnv::chromosome.limit.coords.
 #' @param interleaved.cut (numeric) 0-1 value indicating percentage of interleaved (non-contiguous) SV breakpoint pairs
 #' @param dist.iqm.cut (numeric) interquantile average of the distance between breakpoints within a shattered region
 #' @param verbose (logical)
@@ -268,7 +291,8 @@ shattered.regions <- function(cnv,
                               num.common.sd = 3,
                               maxgap=10000, 
                               chrlist=NULL, 
-                              interleaved.cut = 0.5, 
+                              chr.lim=NULL,
+                              interleaved.cut = 0.33, 
                               dist.iqm.cut = 1e+05, 
                               verbose=TRUE){
   
@@ -278,19 +302,26 @@ shattered.regions <- function(cnv,
     stopifnot(svc@type == "svc")
     svcdat <- svc@data
     
-  chr.lim <- chromosome.limit.coords(cnv)
-  
+    if(is.null(chr.lim)){
+      chr.lim <- chromosome.limit.coords(cnv)
+    }else{
+      stopifnot(ncol(chr.lim) == 3)   
+    }
+    
   if(verbose) message("Finding 'cnv' breakpoints")
   cnvbrk <- cnv.breaks(cnv = cnv, 
                        fc.pct = fc.pct, 
-                       min.cnv.size = min.cnv.size, 
+                       min.cnv.size = min.cnv.size,
+                       min.num.probes = min.num.probes,
                        low.cov = low.cov, 
                        clean.brk = clean.brk,
+                       chrlist=chrlist,
                        verbose = verbose)
   
   if(verbose) message("Finding 'svc' breakpoints")
   svcbrk <- svc.breaks(svc = svc, 
-                      low.cov = low.cov)
+                       chrlist=chrlist,
+                       low.cov = low.cov)
   
   if(verbose) message("Matching 'cnv' and 'svc' breakpoints")
   common.brk <- match.breaks(cnvbrk,svcbrk,
@@ -442,4 +473,78 @@ shattered.regions <- function(cnv,
   
   return(results)
 }
+
+#' Generates a GenomicRanges objact containing genomic bins based on a given bin size. If a cnv (svcnvio) object is provided the chromosome limits 
+#' will be obtaind from mapped regions, otherwise chromosome limits will be obtained from the database (D3GB)
+#'  
+#' @param cnv (S4) an object of class svcnvio containing data type 'cnv' initialized by validate.cnv
+#' @param genome.v (hg19 or hg38) reference genome version to generate genoic bins (ignored if cnv is not NULL)
+#' @param window.size (numeric) size in megabases to generate genomic bins
+#' @param slide.size (numeric) size in megabases of the sliding genomic window; slide.size must be <= 1
+#' @return an instance of the class 'chromo.regs' containing information about shattered regions
+#' @export
+#' 
+
+get.chr.bins <- function(cnv = NULL, genome.v= "hg19", window.size=10, slide.size=2){
+  WS <- window.size * 1e+6
+  SS <- slide.size * 1e+6
+  offset <- round(window.size/slide.size)
+  
+  stopifnot(WS >= SS)
+  
+  if(is.null(cnv)){
+    chr.lim<- d3gb.chr.lim(genome.v=genome.v)
+  }else{
+    chr.lim<- chromosome.limit.coords(cnv)
+  }
+  
+  df.list<-list()
+  for(chr in unique(chr.lim$chrom)){
+    binlimits <- seq(chr.lim$begin[which(chr.lim$chrom == chr)], chr.lim$end[which(chr.lim$chrom == chr)],SS)
+    chrom <- rep(chr, length(binlimits)-offset)
+    Begin <- binlimits[1:(length(binlimits)-offset)]+1
+    End <- binlimits[(offset+1):length(binlimits)]
+    Name <-  paste(chrom,Begin,End,sep=" ")
+    df.list[[chr]] <- data.frame(chrom,Begin,End,Name)
+  }
+  bingr <- with(do.call(rbind,df.list), GRanges(chrom, IRanges(start=Begin, end=End),name=Name))
+  return(bingr)
+}
+
+
+#' Transforms a bed format data.frame containing genomic regions into a matrix of n samples versus m defined genomic bins where bins overlapping with bed segments take value = 1
+#'  
+#' @param bed (data.frame) An data.frame
+#' @param bingr (S4) a GenomicRanges object containing the 
+#' @param genome.v (hg19 or hg38) reference genome version to generate genoic bins (ignored if bingr is not NULL)
+#' @param window.size (numeric) size in megabases to generate genomic bins
+#' @param slide.size (numeric) size in megabases of the sliding genomic window; slide.size must be <= 1
+#' @return an instance of the class 'chromo.regs' containing information about shattered regions
+#' @export
+#' 
+
+bed2chromo.reg <- function(bed, bingr=NULL, genome.v="hg19", window.size=10, slide.size=2){
+  
+  if(!is.null(bingr)){
+    stopifnot(isS4(bingr))
+  }else{
+    bingr <- get.chr.bins(cnv=NULL,genome.v="hg19", window.size=window.size, slide.size=slide.size)
+  }
+  
+  inbedGR <- with(bed,GRanges(chrom, IRanges(start=start, end=end)))
+  idNames <- unique(bed$sampleid)
+  tot <- length(unique(bed$sampleid))*length(binsgr$name)
+  hbd <- matrix(rep(0,),ncol=length(binsgr$name),nrow=length(idNames))
+  colnames(hbd) <- bingr$name
+  rownames(hbd) <- idNames
+  
+  hits <- GenomicAlignments::findOverlaps(bingr,inbedGR)
+  
+  for(i in idNames){
+    hbdbins_i <- bingr$name[queryHits(hits)[which(bed$sampleid[subjectHits(hits)] == i)]]
+    hbd[i,hbdbins_i] <- 1
+  }
+  return(hbd)
+}
+
 

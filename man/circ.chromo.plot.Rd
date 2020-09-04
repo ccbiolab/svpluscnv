@@ -7,9 +7,11 @@
 circ.chromo.plot(
   chromo.regs.obj,
   sample.id,
+  print.name = TRUE,
   genome.v = "hg19",
   lrr.pct = 0.2,
   lrr.max = 4,
+  high.conf = FALSE,
   chrlist = NULL,
   ...
 )
@@ -19,11 +21,15 @@ circ.chromo.plot(
 
 \item{sample.id}{(character) the id of a sample to be plotted within}
 
+\item{print.name}{(logical) whether to print the sample id  in the center of the circular plot}
+
 \item{genome.v}{(character) (hg19 or h38) reference genome version to draw chromosome limits and centromeres}
 
 \item{lrr.pct}{(numeric) copy number change between 2 consecutive segments: i.e (default) cutoff = 0.2 represents 20 percent fold change}
 
 \item{lrr.max}{(numeric) CNV plot limit}
+
+\item{high.conf}{(logical) Whether to plot only high confidence shattered regions (see https://github.com/ccbiolab/svpluscnv#identification-of-shattered-regions for more information)}
 
 \item{chrlist}{(character) vector containing chromosomes to plot; by default only chromosomes with shattered regions are ploted}
 
