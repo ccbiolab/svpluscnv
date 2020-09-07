@@ -307,6 +307,9 @@ shattered.regions <- function(cnv,
     }else{
       stopifnot(ncol(chr.lim) == 3)   
     }
+    if(!is.null(chrlist)){
+      chr.lim <- chr.lim[which(chr.lim$chrom %in% chrlist)]
+    }
     
   if(verbose) message("Finding 'cnv' breakpoints")
   cnvbrk <- cnv.breaks(cnv = cnv, 

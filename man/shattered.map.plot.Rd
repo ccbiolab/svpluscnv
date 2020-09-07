@@ -8,6 +8,7 @@ shattered.map.plot(
   chromo.regs.obj,
   conf = "hc",
   genome.v = "hg19",
+  chrlist = NULL,
   freq.cut = NULL,
   add.legend = "top"
 )
@@ -18,6 +19,8 @@ shattered.map.plot(
 \item{conf}{(character) either 'hc' for high confidence objects or else all included}
 
 \item{genome.v}{(character)  reference genome version to draw chromosome limits and centromeres either hg19 or hg38 accepted}
+
+\item{chrlist}{(character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included}
 
 \item{freq.cut}{the value to draw an horizontal line; use 'freq.p.test' to obtain a threshold for statisticaly significant hot spots}
 

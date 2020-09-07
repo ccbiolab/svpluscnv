@@ -11,7 +11,10 @@ circ.wg.plot(
   genome.v = "hg19",
   lrr.pct = 0.2,
   lrr.max = 4,
-  chrlist = NULL
+  chrlist = NULL,
+  add.cnv.legend = "topleft",
+  add.svc.legend = "toprigh",
+  ...
 )
 }
 \arguments{
@@ -28,6 +31,10 @@ circ.wg.plot(
 \item{lrr.max}{(numeric) maximum CNV to be plotted}
 
 \item{chrlist}{(character) vector containing chromosomes to plot; by default all chromosomes plotted}
+
+\item{add.cnv.legend}{(x,y or coordinates) the position parameter passed to legend to plot CNV (outer tracks) description}
+
+\item{add.svc.legend}{(x,y or coordinates) the position parameter passed to legend to plot SVC (central track) description}
 }
 \value{
 circos plot into open device

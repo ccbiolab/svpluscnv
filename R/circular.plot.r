@@ -10,6 +10,8 @@
 #' @param lrr.max (numeric) CNV plot limit
 #' @param high.conf (logical) Whether to plot only high confidence shattered regions (see https://github.com/ccbiolab/svpluscnv#identification-of-shattered-regions for more information)
 #' @param chrlist (character) vector containing chromosomes to plot; by default only chromosomes with shattered regions are ploted
+#' @param add.cnv.legend (x,y or coordinates) the position parameter passed to legend to plot shattered regions and CNV (outer track) description
+#' @param add.svc.legend (x,y or coordinates) the position parameter passed to legend to plot SVC (central track) description
 #' @param ... Additional graphical parameters
 #' @return circos plot into open device
 #' @keywords CNV, segmentation, structural variant, visualization, circular plot
@@ -36,6 +38,8 @@ circ.chromo.plot <- function(chromo.regs.obj,
                              lrr.max = 4,
                              high.conf=FALSE,
                              chrlist=NULL,
+                             add.cnv.legend="topleft",
+                             add.svc.legend="toprigh",
                              ...){
 
 
@@ -60,7 +64,7 @@ if(nrow(svcdat) >  0){
     alllinks1 <- data.table(svcdat$chrom1,svcdat$pos1,svcdat$pos1 )
     alllinks2 <- data.table(svcdat$chrom2,svcdat$pos2,svcdat$pos2 )
     colnames(alllinks1) <- colnames(alllinks2) <- c("chr","start","end")
-    map = setNames(c("blue", "red", "orange","black","green","black"), c("DEL", "DUP","INV","TRA","INS","BND"))
+    map = setNames(c("blue", "red", "orange","black","green","grey"), c("DEL", "DUP","INV","TRA","INS","BND"))
     alllinkcolors <- map[svcdat$svclass]
     zoomchr <- intersect(which(alllinks1$chr %in% chrlist),which(alllinks2$chr %in% chrlist))
     links1<-alllinks1[zoomchr,]
@@ -109,6 +113,16 @@ circos.genomicTrackPlotRegion(cnvlist, bg.lwd =0.2, bg.col=rainbow(length(cnvlis
 if(nrow(svcdat) >  0) circos.genomicLink(links1, links2, col = linkcolors, border = NA)
 if(print.name == TRUE) text(0, 0,  gsub("_","\n",sample.id),...)
 
+if(!is.null(add.cnv.legend)){
+  legend(add.cnv.legend,c("shattered regions","CNV gain","CNV neutral","CNV loss"),fill=c("purple",NA,NA,NA),
+         lty=c(2,1,1,1), col=c("black","red","black","blue"),border=NA, bty='n', title=expression(bold("CNV (outer)")))
+  }
+
+if(!is.null(add.svc.legend)){
+  map.legend <- map[sort(unique(svcdat$svclass))]
+  legend(add.svc.legend,names(map.legend),lty=1, col=map.legend, bty='n', title=expression(bold("SVC (center)")))
+  }
+
 }
 
 
@@ -124,6 +138,8 @@ if(print.name == TRUE) text(0, 0,  gsub("_","\n",sample.id),...)
 #' @param lrr.pct (numeric) copy number change between 2 consecutive segments: i.e (default) cutoff = 0.2 represents a fold change of 0.8 or 1.2
 #' @param lrr.max (numeric) maximum CNV to be plotted
 #' @param chrlist (character) vector containing chromosomes to plot; by default all chromosomes plotted
+#' @param add.cnv.legend (x,y or coordinates) the position parameter passed to legend to plot CNV (outer tracks) description
+#' @param add.svc.legend (x,y or coordinates) the position parameter passed to legend to plot SVC (central track) description
 #' @return circos plot into open device
 #' @keywords CNV, segmentation, structural variant, visualization, circular plot
 #' @export
@@ -145,7 +161,10 @@ circ.wg.plot <- function(cnv,
                          genome.v = "hg19",
                          lrr.pct = 0.2,
                          lrr.max = 4,
-                         chrlist=NULL){
+                         chrlist=NULL,
+                         add.cnv.legend="topleft",
+                         add.svc.legend="toprigh",
+                         ...){
     
     stopifnot(cnv@type == "cnv")
     cnvdat <- cnv@data
@@ -184,6 +203,17 @@ circ.wg.plot <- function(cnv,
         circos.genomicLines(region, value, col=as.character(allcnvlist[[CELL_META$sector.index]][,"colores"]), numeric.column = c(1), type="segment")
     })
     circos.genomicLink(alllinks1, alllinks2, col = alllinkcolors, border = NA)
+    
+    if(!is.null(add.cnv.legend)){
+      legend(add.cnv.legend,c("CNV gain","CNV neutral","CNV loss"),lty=1, col=c("red","black","blue"),
+             bty='n', title=expression(bold("CNV (outer)")))
+    }
+    
+    if(!is.null(add.svc.legend)){
+      map.legend <- map[sort(unique(svcdat$svclass))]
+      legend(add.svc.legend,names(map.legend),lty=1, col=map.legend, bty='n', title=expression(bold("SVC (center)")))
+    }
+    
 }
 
 

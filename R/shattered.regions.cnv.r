@@ -49,6 +49,10 @@ shattered.regions.cnv <- function(cnv,
   }else{
     stopifnot(ncol(chr.lim) == 3)   
   }
+
+  if(!is.null(chrlist)){
+    chr.lim <- chr.lim[which(chr.lim$chrom %in% chrlist)]
+  }
   
   cnvbrk <- cnv.breaks(cnv = cnv, 
                        fc.pct = fc.pct, 

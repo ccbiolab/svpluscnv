@@ -5,6 +5,7 @@
 #' @param chromo.regs.obj (chromo.regs) An object of class chromo.regs 
 #' @param conf (character) either 'hc' for high confidence objects or else all included
 #' @param genome.v (character)  reference genome version to draw chromosome limits and centromeres either hg19 or hg38 accepted
+#' @param chrlist (character) vector containing chromosomes to include in the analysis; if NULL all chromosomes available in the input will be included
 #' @param freq.cut the value to draw an horizontal line; use 'freq.p.test' to obtain a threshold for statisticaly significant hot spots 
 #' @param add.legend the position of the legend in the plot; if null, no legend will be draw
 #' @return a plot into open device
@@ -25,6 +26,7 @@
 shattered.map.plot <- function(chromo.regs.obj,
                           conf="hc",
                           genome.v = "hg19",
+                          chrlist=NULL,
                           freq.cut=NULL,
                           add.legend="top"){
 
@@ -37,8 +39,10 @@ shattered.map.plot <- function(chromo.regs.obj,
 
     chrlengths <- vapply(unique(bands$chr), function(i) max(bands$end[which(bands$chr == i)]), 1)
     names(chrlengths) <- paste("chr",unique(bands$chr),sep="")
-
-    chrlist <- unique(do.call(rbind,strsplit(colnames(chromo.regs.obj@high.density.regions)," "))[,1])
+    
+    if(is.null(chrlist)){
+        chrlist <- unique(do.call(rbind,strsplit(colnames(chromo.regs.obj@high.density.regions)," "))[,1])
+    }
     stopifnot( length(which(!chrlist %in% names(chrlengths))) == 0 )
     
     if(conf == "hc") {
@@ -62,6 +66,8 @@ coloresBarplot[qarm] <- q_chrcols[names(qarm)]
 axislab <- chrstarts<-  chrend <- chrlengths[chrlist]
 tab <- data.table(do.call(rbind,strsplit(names(highDensitiRegionsFreq)," ")),names(highDensitiRegionsFreq))
 colnames(tab) <- c("chrom","start","end","regid")
+tab <- tab[which(tab$chrom %in% chrlist)]
+highDensitiRegionsFreq <- highDensitiRegionsFreq[which(tab$chrom %in% chrlist)]
 tab$start <-as.numeric(tab$start)
 tab$end <-as.numeric(tab$end)
 

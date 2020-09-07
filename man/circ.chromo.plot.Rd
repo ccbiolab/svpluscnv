@@ -13,6 +13,8 @@ circ.chromo.plot(
   lrr.max = 4,
   high.conf = FALSE,
   chrlist = NULL,
+  add.cnv.legend = "topleft",
+  add.svc.legend = "toprigh",
   ...
 )
 }
@@ -32,6 +34,10 @@ circ.chromo.plot(
 \item{high.conf}{(logical) Whether to plot only high confidence shattered regions (see https://github.com/ccbiolab/svpluscnv#identification-of-shattered-regions for more information)}
 
 \item{chrlist}{(character) vector containing chromosomes to plot; by default only chromosomes with shattered regions are ploted}
+
+\item{add.cnv.legend}{(x,y or coordinates) the position parameter passed to legend to plot shattered regions and CNV (outer track) description}
+
+\item{add.svc.legend}{(x,y or coordinates) the position parameter passed to legend to plot SVC (central track) description}
 
 \item{...}{Additional graphical parameters}
 }
